@@ -28,6 +28,10 @@ for i in range(epis):
         s = s1
         if d == True:
             break
+        rAll += r
+    
+    print(rAll)
     rev_list.append(rAll)
-env.render()    
+
+# env.render()    
 env.close()
