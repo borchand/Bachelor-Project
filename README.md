@@ -31,3 +31,4 @@ docker run -it bachelor-project /bin/bash
 ```
 
 The exit the interactive mode press `ctrl + p` followed by `ctrl + q`.
+or press `ctrl + d` to exit the session
