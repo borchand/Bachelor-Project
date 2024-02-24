@@ -9,7 +9,7 @@ Q = np.zeros([env.observation_space.n,env.action_space.n])
 # 2. Parameters of Q-learning
 eta = .628
 gma = .9
-epis = 500000
+epis = 500
 rev_list = [] # rewards per episode calculate
 # 3. Q-learning Algorithm
 for i in tqdm(range(epis)):
