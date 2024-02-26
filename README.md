@@ -22,7 +22,7 @@ docker build -t bachelor-project .
 
 Then you can run the application using the following command:
 ```
-docker run -rm bachelor-project
+docker run --rm bachelor-project
 ```
 
 or run it interactively using the following command:
@@ -30,4 +30,10 @@ or run it interactively using the following command:
 docker run -it bachelor-project /bin/bash
 ```
 
+To run the bash script `run.sh` in the interactive environment
+```
+./run.sh
+```
+
 The exit the interactive mode press `ctrl + p` followed by `ctrl + q`.
+or press `ctrl + d` to exit the session
