@@ -1,3 +1,16 @@
 [submodule "markov-state-abstraction"]
 	path = markovStateAbstractions
 	url = https://github.com/camall3n/markov-state-abstractions.git
+[submodule "icml_2019_state_abstraction"]
+	path = icml_2019_state_abstraction
+	url = https://github.com/anonicml2019/icml_2019_state_abstraction.git
+[submodule "CausalDynamicsLearning"]
+	path = CausalDynamicsLearning
+	url = https://github.com/wangzizhao/CausalDynamicsLearning.git
+[submodule "PCLaSt"]
+	path = PCLaSt
+	url = https://github.com/shivakanthsujit/PCLaSt.git
+[submodule "auto_mask"]
+	path = auto_mask
+	url = https://github.com/Elvirawzy/auto_mask.git
+	branch = master
