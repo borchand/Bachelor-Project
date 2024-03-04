@@ -1,6 +1,3 @@
 [submodule "markov-state-abstraction"]
 	path = markovStateAbstractions
 	url = https://github.com/camall3n/markov-state-abstractions.git
-[submodule "icml_2019_state_abstraction"]
-	path = icml_2019_state_abstraction
-	url = https://github.com/anonicml2019/icml_2019_state_abstraction.git
