@@ -1,3 +1,3 @@
-from icml_2019_state_abstraction.experiments import abstraction_network
+from icml_2019_state_abstraction.experiments.abstraction import abstraction_network
 
 
