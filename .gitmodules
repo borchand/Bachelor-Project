@@ -1,6 +1,6 @@
 [submodule "icml_2019_state_abstraction"]
 	path = icml_2019_state_abstraction
 	url = https://github.com/xXPinkmagicXx/icml_2019_state_abstraction.git
-[submodule "CAT-RL"]
+[submodule "CATRL"]
 	path = CATRL
 	url = https://github.com/borchand/CAT-RL
