@@ -16,7 +16,7 @@ def main():
     run.main(gym_env)
 
     ## run learning experiment
-    run_learning_experiment.main(gym_env, abstraction=True)
+    # run_learning_experiment.main(gym_env, abstraction=True)
 
 if __name__ == "__main__":
     main()
