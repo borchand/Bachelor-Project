@@ -3,11 +3,11 @@ from baseenv import BaseEnv, EnvType
 
 class AcrobotEnv(BaseEnv):
     """
-        This class defines the Mountain Car environment, which is a subclass of the BaseEnv class.
+        This class defines the Acrobot environment, which is a subclass of the BaseEnv class.
         It initializes the environment, and defines the step methods.
     """
     def __init__(self, step_max, render=False):
-        super().__init__(EnvType.Acrobot.value, 1, render=render)
+        super().__init__(EnvType.Acrobot.value, render=render)
         self.steps = 0
         self.step_max = step_max
 
@@ -29,6 +29,7 @@ class AcrobotEnv(BaseEnv):
         if terminated:
             done = True
             success = True
+            reward = 1000
 
             
         return self.scale_state(new_state.tolist()), reward, done, success

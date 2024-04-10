@@ -3,11 +3,11 @@ from baseenv import BaseEnv, EnvType
 
 class LunarLanderEnv(BaseEnv):
     """
-        This class defines the Mountain Car environment, which is a subclass of the BaseEnv class.
+        This class defines the LunarLander environment, which is a subclass of the BaseEnv class.
         It initializes the environment, and defines the step methods.
     """
     def __init__(self, render=False):
-        super().__init__(EnvType.Lunar_Lander.value, 1, render=render)
+        super().__init__(EnvType.Lunar_Lander.value, render=render)
 
     def step(self, action):  
         new_state, reward, terminated, _, _ = super().step(action)
