@@ -1,13 +1,17 @@
+import sys
 import numpy as np
-from baseenv import BaseEnv, EnvType
+from baseenv import ContinuousActionBaseEnv, EnvType
 
-class MountainCarEnv(BaseEnv):
+class MountainCarContinuousEnv(ContinuousActionBaseEnv):
     """
-        This class defines the Mountain Car environment, which is a subclass of the BaseEnv class.
+        This class defines the Mountain Car Continuous environment, which is a subclass of the BaseEnv class.
         It initializes the environment, and defines the step methods.
     """
     def __init__(self, render=False):
-        super().__init__(EnvType.Mountain_Car.value, render=render)
+        super().__init__(
+            EnvType.Mountain_Car_Continuous.value,
+            2,
+            render=render)
 
     def step(self, action):  
         new_state, reward, terminated, truncated, _ = super().step(action)
@@ -17,7 +21,6 @@ class MountainCarEnv(BaseEnv):
         done = False
 
         if terminated:
-            reward = 1000 
             success = True
             done = True
 

@@ -9,7 +9,7 @@ class CartPoleEnv(BaseEnv):
     """
 
     def __init__(self, step_max, render=False):
-        super().__init__(EnvType.Cart_Pole.value, 1, True, render=render)
+        super().__init__(EnvType.Cart_Pole.value, True, render=render)
         self.steps = 0
         self.step_max = step_max
 

@@ -2,6 +2,7 @@ import sys
 import os
 import pickle
 import pandas as pd
+import argparse
 
 sys.path.append('CATRL/')
 sys.path.append('Code/CATRL/envs/')
@@ -76,15 +77,37 @@ def main(config):
 
 
 if __name__ == "__main__":
-    
 
-    # config = CartPole
-    # config = MountainCar
-    # config = LunarLander
-    config = Acrobot
+    parser = argparse.ArgumentParser(description='Set options for training and rendering CAT_RL')
+    parser.add_argument('-t', '--train', choices=['t', 'f'], default='t', help='Train the model')
+    parser.add_argument('-r', '--render', choices=['t', 'f'], default='t', help='Render the model')
+    # choose the environment to train and render
+    parser.add_argument('-e', '--env', default='MountainCar', choices=['MountainCar', 'MountainCarContinuous','CartPole', 'LunarLander', 'Acrobot', 'Pendulum'], help='Choose the environment to train and render')
+    args = parser.parse_args()
 
-    # main(config)
+    if args.env == 'MountainCar':
+        config = MountainCar
+    elif args.env == 'MountainCarContinuous':
+        config = MountainCarContinuous
+    elif args.env == 'CartPole':
+        config = CartPole
+    elif args.env == 'LunarLander':
+        config = LunarLander
+    elif args.env == 'Acrobot':
+        config = Acrobot
+    elif args.env == 'Pendulum':
+        config = Pendulum
+    else:
+        print("Invalid environment")
+        sys.exit()
 
-    
-    agent, abstract = load_model(config['map_name'])
-    show_model(agent, abstract, config['renderEnv'])
+    print("Environment: ", args.env)
+
+    if args.train == 't':
+        print("Training the model")
+        main(config)
+
+    if args.render == 't':
+        print("Rendering the model")
+        agent, abstract = load_model(config['map_name'])
+        show_model(agent, abstract, config['renderEnv'])

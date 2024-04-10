@@ -16,14 +16,46 @@ pip install -r requirements.txt
 ```
 
 
+## CAT_RL
+about...
+
+### Environments
+This repository contains the following environments:
+- `CartPole-v1`
+- `MountainCar-v0`
+- `LunarLander-v2`
+- `Acrobot-v1`
+
+### Running the code
+To run the code, you can use the following command:
+```
+python CAT-RL.py
+```
+This will run all the environments and render the model after training.
+
+There are also some optional arguments you can use:
+- `--env` or `-e` to specify the environment you want to run 
+    - default: `MountainCar`
+    - options: `CartPole, MountainCar, LunarLander, Acrobot, MountainCarContinuous`
+- `--train` or `-t` to train the model
+    - default: `t` (True)
+    - options: `t, f` (True, False)
+- `--render` or `-r` to render the model
+    - default: `t` (True)
+    - options: `t, f` (True, False)
+- `--help` or `-h` to get help
+
+For example, to run the `CartPole-v1` environment without rendering the model, you can use the following command:
+```
+python CAT-RL.py -r f -e CartPole
+```
+or to just render a trained model from the `CartPole-v1` environment, you can use the following command:
+```
+python CAT-RL.py -t f -e CartPole
+```
 
 
-
-
-
-
-
-# Docker stuff (might not need)
+<!-- # Docker stuff (might not need)
 Make sure you have docker installed on your machine. If not, you can download it with brew using the following command:
 ```
 brew install docker
@@ -58,4 +90,4 @@ To run the bash script `run.sh` in the interactive environment
 ```
 
 The exit the interactive mode press `ctrl + p` followed by `ctrl + q`.
-or press `ctrl + d` to exit the session
+or press `ctrl + d` to exit the session -->
