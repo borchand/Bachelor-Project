@@ -6,6 +6,7 @@ from stable_baselines3 import PPO, A2C, DQN, SAC, TD3, DDPG
 from stable_baselines3.common.evaluation import evaluate_policy
 import pandas as pd
 import numpy as np
+import argparse
 # Allow the use of `pickle.load()` when downloading model from the hub
 # Please make sure that the organization from which you download can be trusted
 os.environ["TRUST_REMOTE_CODE"] = "True"
@@ -17,36 +18,65 @@ os.environ["TRUST_REMOTE_CODE"] = "True"
 #     repo_id="sb3/dqn-MountainCar-v0",
 #     filename="dqn-MountainCar-v0.zip",
 # )
+def _get_model_class(algo_name):
+    if algo_name == 'ppo':
+        return PPO
+    elif algo_name == 'a2c':
+        return A2C
+    elif algo_name == 'dqn':
+        return DQN
+    elif algo_name == 'sac':
+        return SAC
+    elif algo_name == 'td3':
+        return TD3
+    elif algo_name == 'ddpg':
+        return DDPG
+    else:
+        raise ValueError('Invalid algorithm name')
 
-env_name = "CartPole-v1"
+def main(env_name, algo_name, render_mode, timesteps):
+    
+    env = gym.make(env_name, render_mode = "rgb_array")
 
-env = gym.make(env_name, render_mode = "rgb_array")
+    save_name = "rl-trianed-agents/"+ algo_name + "_MountainCar-v0"
 
-algo_name = "a2c"
+    # get the model class from the algo name
+    model_class = _get_model_class(algo_name)
 
-save_name = algo_name + "_MountainCar-v0"
+    # create the model
+    model = model_class("MlpPolicy", env=env, verbose=1)
 
-# create the model with the environment
-model = A2C("MlpPolicy",env=env, verbose=1)
+    # learn the model
+    env_steps = 200
+    episodes = 1000
+    total_timesteps = env_steps * episodes
+    model.learn(total_timesteps=total_timesteps, log_interval=4)
+    # save the model
+    model.save(save_name)
 
-# learn the model
-env_steps = 200
-episodes = 1000
-total_timesteps = env_steps * episodes
-model.learn(total_timesteps=total_timesteps, log_interval=4)
-# save the model
-model.save(save_name)
+    # delete trained model to demonstrate loading
+    # del model 
 
-del model # delete trained model to demonstrate loading
+    # load the model
+    # model = model_class.load(save_name)
 
-# load the model
-model = A2C.load(save_name)
+    # obs, info = env.reset()
+    # while True:
+    #     action, _states = model.predict(obs, deterministic=True)
+    #     obs, reward, terminated, truncated, info = env.step(action)
+    #     if terminated or truncated:
+    #         obs, info = env.reset()
+    #         break
+    #     env.render()
 
-obs, info = env.reset()
-while True:
-    action, _states = model.predict(obs, deterministic=True)
-    obs, reward, terminated, truncated, info = env.step(action)
-    if terminated or truncated:
-        obs, info = env.reset()
-        break
-    env.render()
+if __name__ == "__main__":
+    
+    parser = argparse.ArgumentParser(description='Set options for training and rendering CAT_RL')
+    parser.add_argument('-r', '--render', choices=['t', 'f'], default='t', help='Render the model')
+    parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
+    parser.add_argument('-a', '--algo', default='a2c', help='Algorithm to use')
+    parser.add_argument('-t', '--time-steps', default=200, help='Number of time steps to train the model for')
+    
+    args = parser.parse_args()
+    
+    main(args.env, args.algo, args.render == 't', args.time_steps)
