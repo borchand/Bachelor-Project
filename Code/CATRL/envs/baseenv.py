@@ -1,8 +1,8 @@
 import numpy as np
 import math
-import gym
+import gymnasium as gym
 from enum import Enum
-from gym import spaces
+from gymnasium import spaces
 
 class EnvType(Enum):
     Mountain_Car = "MountainCar-v0"
