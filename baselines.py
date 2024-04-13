@@ -48,7 +48,7 @@ def main(env_name, algo_name, render_mode, timesteps):
     model.learn(total_timesteps=timesteps, log_interval=4)
     
     # save the model
-    save_name = "rl-trained-agents/"+ algo_name + "_MountainCar-v0"
+    save_name = "rl-trained-agents/"+ algo_name + "_" + env_name
     model.save(save_name)
 
     # delete trained model to demonstrate loading
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     
     parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
     parser.add_argument('-a', '--algo', default='a2c', help='Algorithm to use')
-    parser.add_argument('-t', '--time-steps', default=2000, help='Number of time steps to train the model for')
+    parser.add_argument('-t', '--time-steps', default=2000, help='Number of time steps to train the model for', type=int)
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='t', help='Render the model')
     
     args = parser.parse_args()
