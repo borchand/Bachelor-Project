@@ -79,6 +79,24 @@ def main(env_name, algo_name, timesteps: int, render = False, save = True, train
                 break
             eval_env.render()
 
+def show_model(env_name, algo_name):
+
+    eval_env = gym.make(env_name, render_mode='human')
+    save_name = "./rl-trained-agents/"+ algo_name + "_" + env_name
+    
+    model = _get_model_class(algo_name)
+    model = model.load(save_name, env=eval_env)
+
+    obs, info = eval_env.reset()
+    print("this is the obs", obs)
+    for _ in range(1000):
+        action, _states = model.predict(obs, deterministic=True)
+        obs, reward, terminated, truncated, info = eval_env.step(action)
+        if terminated or truncated:
+            obs, info = eval_env.reset()
+            break
+        eval_env.render()
+
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description='Set options for training and rendering CAT_RL')
@@ -98,20 +116,15 @@ if __name__ == "__main__":
     
     # Render the model
     if args.show == 't':
+        show_model(args.env, args.algo)
+        
+    else:
+        # Else just train the model
         main(
             env_name=args.env,
             algo_name=args.algo,
-            timesteps=0,
-            render=True,
-            save=False,
-            train=False)
-    
-    # Else just train the model
-    main(
-        env_name=args.env,
-        algo_name=args.algo,
-        timesteps=args.time_steps,
-        render=args.render == 't',
-        save=args.save == 't',
-        train=args.train == 't'
-        )
+            timesteps=args.time_steps,
+            render=args.render == 't',
+            save=args.save == 't',
+            train=args.train == 't'
+            )
