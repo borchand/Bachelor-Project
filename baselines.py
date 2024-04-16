@@ -2,6 +2,7 @@ import os
 import gymnasium as gym
 
 from huggingface_sb3 import load_from_hub
+from icml_2019_state_abstraction.mac.ActionWrapper import discretizing_wrapper
 from stable_baselines3 import PPO, A2C, DQN, SAC, TD3, DDPG
 from stable_baselines3.common.evaluation import evaluate_policy
 import pandas as pd
@@ -47,6 +48,9 @@ def main(env_name, algo_name, timesteps: int, render = False, save = True, train
     """
     save_name = "rl-trained-agents/"+ algo_name + "_" + env_name
     env = gym.make(env_name)
+
+    if isinstance(env.action_space, gym.spaces.Box): 
+        env = discretizing_wrapper(env, 20)
 
     # get the model class from the algo name
     model_class = _get_model_class(algo_name)
