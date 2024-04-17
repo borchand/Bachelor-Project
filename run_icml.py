@@ -38,8 +38,8 @@ def main(gym_name: str, algo: str, time_steps: int, train=True, run_experiment=T
         
         print("Running training of algorithm: ", algo, "in environment: ", gym_name, "for ", time_steps, "time steps.")
         baselines.main(
-            gym_name=gym_name,
-            algo=algo,
+            env_name=gym_name,
+            algo_name=algo,
             timesteps=time_steps,
             render=render,
             save=save,
