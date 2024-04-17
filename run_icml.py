@@ -10,7 +10,7 @@ import baselines
 import argparse
 
 
-def main(gym_name: str, algo: str, time_steps: int, train = True, run_experiment = True, abstraction = True, render= False, save = True):
+def main(gym_name: str, algo: str, time_steps: int, train = True, run_experiment = True, abstraction = True, load_model = False, render= False, save = True):
 
     
     ## run training of policy
@@ -28,7 +28,8 @@ def main(gym_name: str, algo: str, time_steps: int, train = True, run_experiment
         run_learning_experiment.main(
             gym_name,
             algo,
-            abstraction=abstraction)
+            abstraction=abstraction,
+            load_model=load_model)
 
 def show_model(gym_name: str, algo: str):
     pass
@@ -45,7 +46,8 @@ if __name__ == "__main__":
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-ex', '--experiment', choices=['t', 'f'], default='t', help='Run the learning experiment')
     parser.add_argument('-ab', '--abstraction', choices=['t', 'f'], default='t', help='Use state abstraction')
-
+    parser.add_argument('-l', '--load', choices=['t', 'f'], default='f', help='Load a pre-trained model')
+    
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='f', help='Render the model')
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     parser.add_argument('-sh', '--show', choices=['t', 'f'], default='f', help='Show the model')
@@ -56,6 +58,8 @@ if __name__ == "__main__":
         gym_name=args.env,
         algo=args.algo,
         time_steps=args.time_steps,
+        abstraction=args.abstraction == 't',
         train=args.train == 't',
+        load_model=args.load == 't',
         render=args.render == 't',
         save=args.save == 't')
