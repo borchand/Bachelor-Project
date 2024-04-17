@@ -34,8 +34,43 @@ def _get_model_class(algo_name):
         return DDPG
     else:
         raise ValueError('Invalid algorithm name')
+def get_save_name(algo_name, env_name, timesteps):
+    """
+    Args:
+        :param algo_name (str): Name of the algorithm
+        :param env_name (str): Name of the environment
+        :param timesteps (int): Number of timesteps to train the model
+    Returns:
+        save_name (str): Name of the file to save the model as
+    """
+    continuous_actions = ['Pendulum-v0', 'MountainCarContinuous-v0', 'LunarLanderContinuous-v2']
+    
+    save_name = "rl-trained-agents/"+ str(timesteps) + '/' 
+    
+    if env_name in continuous_actions:
+        save_name +=  "discrete_" 
+    save_name += algo_name + "_" + env_name 
+    
+    return save_name
 
-def main(env_name, algo_name, timesteps: int, render = False, save = True, train = True):
+def get_gym_env(env_name, render=False, k=20):
+    """
+    Args:
+        :param env_name (str): Name of the environment
+        :param render = True (bool): If True, render the environment
+        :param discretetize = True (bool): If True, discretize the action space
+        :param k = 20 (int): Number of bins to discretize the action space
+    Returns:
+        gym_env (gym.Env): Gym environment
+    """
+    gym_env = gym.make(env_name, render_mode='human') if render else gym.make(env_name)
+
+    if isinstance(gym_env.action_space, gym.spaces.Box): 
+        gym_env = discretizing_wrapper(gym_env, k)
+
+    return gym_env
+
+def main(env_name, algo_name, timesteps = 100_000, render=False, save=True, train=True):
     """
     Args:
         :param env_name (str): Name of the environment
@@ -46,11 +81,8 @@ def main(env_name, algo_name, timesteps: int, render = False, save = True, train
         :param save = True (bool): If True, save the trained model
         :param train = True (bool): If True, train the model
     """
-    save_name = "rl-trained-agents/"+ algo_name + "_" + env_name
-    env = gym.make(env_name)
-
-    if isinstance(env.action_space, gym.spaces.Box): 
-        env = discretizing_wrapper(env, 20)
+    env = get_gym_env(env_name, render)
+    save_name = get_save_name(algo_name, env_name, timesteps)
 
     # get the model class from the algo name
     model_class = _get_model_class(algo_name)
@@ -70,18 +102,18 @@ def main(env_name, algo_name, timesteps: int, render = False, save = True, train
     if render:
         eval_env = gym.make(env_name, render_mode='human')
         
-        model = model.load(save_name, env=eval_env)
+        model = model.load(save_name, env=env)
 
-        model.set_env(eval_env)
-        obs, info = eval_env.reset()
+        model.set_env(env)
+        obs, info = env.reset()
         
         for _ in range(1000):
             action, _states = model.predict(obs, deterministic=True)
-            obs, reward, terminated, truncated, info = eval_env.step(action)
+            obs, reward, terminated, truncated, info = env.step(action)
             if terminated or truncated:
-                obs, info = eval_env.reset()
+                obs, info = env.reset()
                 break
-            eval_env.render()
+            env.render()
 
 def show_model(env_name, algo_name):
 
@@ -106,11 +138,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Set options for training and rendering CAT_RL')
     
     parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
-    parser.add_argument('-a', '--algo', default='dqn', help='Algorithm to use when training')
+    parser.add_argument('-a', '--algo', default='ppo', help='Algorithm to use when training')
     # parser.add_argument('-ep', '--episodes', default=100, help='Number of episodes to train the model for', type=int)
     parser.add_argument('-t', '--time-steps', default=None, help='Number of time steps to train the model for', type=int)
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
-    
+    parser.add_argument('-d', '--discretize', choices=['t', 'f'], default='t', help='Discretize the action space')
+
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='f', help='Render the model')
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     

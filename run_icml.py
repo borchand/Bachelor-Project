@@ -10,17 +10,41 @@ import baselines
 import argparse
 
 
-def main(gym_name: str, algo: str, time_steps: int, train = True, run_experiment = True, abstraction = True, load_model = False, render= False, save = True):
+def main(gym_name: str, algo: str, time_steps: int, train=True, run_experiment=True, abstraction=True, load_model=False, render=False, save=True):
 
+    """
+    Args:
+        :param gym_name (str): Name of the environment
+        :param algo (str): Name of the algorithm
+        :param time_steps (int): Number of time steps to train the model for
+        :param train = True (bool): If True, train the model
+        :param run_experiment = True (bool): If True, run the learning experiment
+        :param abstraction = True (bool): If True, use state abstraction
+        :param discretize = True (bool): If True, discretize the action space
+        :param load_model = False (bool): If True, load a pre-trained model
+        :param render = False (bool): If True, render the model
+        :param save = True (bool): If True, save the model
+    Summary:
+        Run the training of the model and the learning experiment
+    """
     
     ## run training of policy
     if train and algo == 'mac':
+        
         print("running training of algorithm: ", algo, "in environment: ", gym_name)
-            
         run.main(gym_name)
+    
     elif train:
+        
         print("Running training of algorithm: ", algo, "in environment: ", gym_name, "for ", time_steps, "time steps.")
-        baselines.main(gym_name, algo, time_steps, render, save, train)
+        baselines.main(
+            gym_name=gym_name,
+            algo=algo,
+            timesteps=time_steps,
+            render=render,
+            save=save,
+            train=train)
+        
         print("Training complete.")
          
     ## run learning experiment
@@ -46,8 +70,8 @@ if __name__ == "__main__":
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-ex', '--experiment', choices=['t', 'f'], default='t', help='Run the learning experiment')
     parser.add_argument('-ab', '--abstraction', choices=['t', 'f'], default='t', help='Use state abstraction')
+
     parser.add_argument('-l', '--load', choices=['t', 'f'], default='f', help='Load a pre-trained model')
-    
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='f', help='Render the model')
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     parser.add_argument('-sh', '--show', choices=['t', 'f'], default='f', help='Show the model')
