@@ -60,7 +60,7 @@ def main(env_name, algo_name, timesteps: int, render = False, save = True, train
 
     # model learn the env
     if train:
-        model.learn(total_timesteps=timesteps, log_interval=10)
+        model.learn(total_timesteps=timesteps, log_interval=5)
     # save the model
     
     if save:
