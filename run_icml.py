@@ -48,12 +48,14 @@ def main(gym_name: str, algo: str, time_steps: int, train=True, run_experiment=T
         print("Training complete.")
          
     ## run learning experiment
-    if run_experiment:
+    if run_experiment or abstraction or load_model:
         run_learning_experiment.main(
-            gym_name,
-            algo,
+            env_name=gym_name,
+            algo=algo,
             abstraction=abstraction,
-            load_model=load_model)
+            load_model=load_model,
+            policy_train_steps=time_steps,
+            run_expiriment=run_experiment)
 
 def show_model(gym_name: str, algo: str):
     pass
@@ -86,4 +88,5 @@ if __name__ == "__main__":
         train=args.train == 't',
         load_model=args.load == 't',
         render=args.render == 't',
-        save=args.save == 't')
+        save=args.save == 't',
+        run_experiment=args.experiment == 't')

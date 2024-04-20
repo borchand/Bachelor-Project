@@ -1,0 +1,31 @@
+{
+    "MDP": {
+        "name": "<class 'simple_rl.tasks.gym.GymMDPClass.GymMDP'>",
+        "params": {
+            "env_name": "MountainCarContinuous-v0"
+        }
+    },
+    "AGENTS": {
+        "<class 'simple_rl.agents.QLearningAgentClass.QLearningAgent'>": {
+            "params": {
+                "alpha": 0.1,
+                "gamma": 0.99,
+                "epsilon": 0.1,
+                "anneal": false,
+                "explore": "uniform"
+            },
+            "index": 0
+        },
+        "<class 'simple_rl.abstraction.AbstractionWrapperClass.AbstractionWrapper'>": {
+            "params": {},
+            "index": 1
+        }
+    },
+    "MISC": {
+        "instances": 1,
+        "episodes": 50,
+        "steps": 200,
+        "track_disc_reward": false
+    },
+    "FUNC": "run_agents_on_mdp"
+}

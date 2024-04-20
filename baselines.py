@@ -43,12 +43,8 @@ def get_save_name(algo_name, env_name, timesteps):
     Returns:
         save_name (str): Name of the file to save the model as
     """
-    continuous_actions = ['Pendulum-v0', 'MountainCarContinuous-v0', 'LunarLanderContinuous-v2']
-    
     save_name = "rl-trained-agents/"+ str(timesteps) + '/' 
     
-    if env_name in continuous_actions:
-        save_name +=  "discrete_" 
     save_name += algo_name + "_" + env_name 
     
     return save_name
