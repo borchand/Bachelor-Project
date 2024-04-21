@@ -34,16 +34,22 @@ def _get_model_class(algo_name):
         return DDPG
     else:
         raise ValueError('Invalid algorithm name')
-def get_save_name(algo_name, env_name, timesteps):
+def get_save_name(algo_name, env_name, timesteps, k=None):
     """
     Args:
         :param algo_name (str): Name of the algorithm
         :param env_name (str): Name of the environment
         :param timesteps (int): Number of timesteps to train the model
+        :param k = 20 (int): Number of bins to discretize the action space
     Returns:
         save_name (str): Name of the file to save the model as
     """
+    continuous_action_envs = ["MountainCarContinuous-v0", "Pendulum-v1", "Pendulum-v0", "LunarLanderContinuous-v2"]
     save_name = "rl-trained-agents/"+ str(timesteps) + '/' 
+    
+    # If the action space is discretized, add the number of bins to the save name
+    if k > 1 and env_name in continuous_action_envs:
+        save_name += str(k) + "_"
     
     save_name += algo_name + "_" + env_name 
     
@@ -66,7 +72,7 @@ def get_gym_env(env_name, render=False, k=20):
 
     return gym_env
 
-def main(env_name, algo_name, timesteps = 100_000, render=False, save=True, train=True):
+def main(env_name, algo_name, timesteps = 100_000, k=20, render=False, save=True, train=True):
     """
     Args:
         :param env_name (str): Name of the environment
@@ -77,8 +83,8 @@ def main(env_name, algo_name, timesteps = 100_000, render=False, save=True, trai
         :param save = True (bool): If True, save the trained model
         :param train = True (bool): If True, train the model
     """
-    env = get_gym_env(env_name, render)
-    save_name = get_save_name(algo_name, env_name, timesteps)
+    env = get_gym_env(env_name, render, k)
+    save_name = get_save_name(algo_name, env_name, timesteps, k=k)
 
     # get the model class from the algo name
     model_class = _get_model_class(algo_name)
@@ -96,8 +102,6 @@ def main(env_name, algo_name, timesteps = 100_000, render=False, save=True, trai
 
 
     if render:
-        eval_env = gym.make(env_name, render_mode='human')
-        
         model = model.load(save_name, env=env)
 
         model.set_env(env)
@@ -138,7 +142,7 @@ if __name__ == "__main__":
     # parser.add_argument('-ep', '--episodes', default=100, help='Number of episodes to train the model for', type=int)
     parser.add_argument('-t', '--time-steps', default=None, help='Number of time steps to train the model for', type=int)
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
-    parser.add_argument('-d', '--discretize', choices=['t', 'f'], default='t', help='Discretize the action space')
+    parser.add_argument('-k', '--k-bins',  default=20 , help='Discretize the action space into k bins', type=int)
 
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='f', help='Render the model')
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
@@ -159,5 +163,5 @@ if __name__ == "__main__":
             timesteps=args.time_steps,
             render=args.render == 't',
             save=args.save == 't',
-            train=args.train == 't'
-            )
+            train=args.train == 't',
+            k=args.k_bins)
