@@ -10,7 +10,7 @@ import baselines
 import argparse
 
 
-def main(gym_name: str, algo: str, time_steps: int, train=True, run_experiment=True, abstraction=True, load_model=False, render=False, save=True):
+def main(gym_name: str, algo: str, time_steps: int, k_bins=1, train=True, run_experiment=True, abstraction=True, load_model=False, render=False, save=True):
 
     """
     Args:
@@ -32,7 +32,10 @@ def main(gym_name: str, algo: str, time_steps: int, train=True, run_experiment=T
     if train and algo == 'mac':
         
         print("running training of algorithm: ", algo, "in environment: ", gym_name)
-        run.main(gym_name)
+        run.main(
+            env_name=gym_name,
+            time_steps=time_steps,
+            k_bins=k_bins)
     
     elif train:
         
@@ -68,7 +71,8 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
     parser.add_argument('-a', '--algo', default='dqn', choices=['mac', 'dqn', 'ppo', 'sac'], help='Algorithm to use when training')
     parser.add_argument('-t', '--time-steps', default=100_000, help='Number of time steps to train the model for', type=int)
-    
+    parser.add_argument('-k', '--k-bins', default=1, help='Number of bins to discretize the action space', type=int)
+
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-ex', '--experiment', choices=['t', 'f'], default='t', help='Run the learning experiment')
     parser.add_argument('-ab', '--abstraction', choices=['t', 'f'], default='t', help='Use state abstraction')
@@ -89,4 +93,5 @@ if __name__ == "__main__":
         load_model=args.load == 't',
         render=args.render == 't',
         save=args.save == 't',
-        run_experiment=args.experiment == 't')
+        run_experiment=args.experiment == 't',
+        k_bins=args.k_bins)
