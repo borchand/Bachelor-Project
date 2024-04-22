@@ -71,7 +71,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Set options for training and rendering icml')
     
     parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
-    parser.add_argument('-a', '--algo', default='dqn', choices=['mac', 'dqn', 'ppo', 'sac'], help='Algorithm to use when training')
+    parser.add_argument('-a', '--algo', default='ppo', choices=['mac', 'dqn', 'ppo', 'sac'], help='Algorithm to use when training')
     parser.add_argument('-t', '--time-steps', default=100_000, help='Number of time steps to train the model for', type=int)
     parser.add_argument('-k', '--k-bins', default=1, help='Number of bins to discretize the action space', type=int)
 
