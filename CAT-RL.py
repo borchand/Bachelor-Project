@@ -8,8 +8,7 @@ sys.path.append('CATRL/')
 sys.path.append('Code/CATRL/envs/')
 
 from CATRL.method_catrl import train_CAT_RL
-from Code.CATRL.envs.MountainCar import MountainCarEnv
-from Code.CATRL.envs.config import *
+from Code.CATRL.config import *
 
 def save_log(log_data, file_name):
     # create folder results if it does not exist
