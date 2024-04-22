@@ -44,6 +44,7 @@ def main(gym_name: str, algo: str, time_steps: int, k_bins=1, train=True, run_ex
             env_name=gym_name,
             algo_name=algo,
             timesteps=time_steps,
+            k=k_bins,
             render=render,
             save=save,
             train=train)
@@ -55,6 +56,7 @@ def main(gym_name: str, algo: str, time_steps: int, k_bins=1, train=True, run_ex
         run_learning_experiment.main(
             env_name=gym_name,
             algo=algo,
+            k_bins=k_bins,
             abstraction=abstraction,
             load_model=load_model,
             policy_train_steps=time_steps,
