@@ -1,9 +1,13 @@
-from CartPole import CartPoleEnv
-from MountainCar import MountainCarEnv
-from MountainCarContinuous import MountainCarContinuousEnv
-from LunarLander import LunarLanderEnv
-from Acrobot import AcrobotEnv
-from Pendulum import PendulumEnv
+import sys
+sys.path.append('Code/envs/')
+sys.path.append('Code/')
+
+from envs.CartPole import CartPoleEnv
+from envs.MountainCar import MountainCarEnv
+from envs.MountainCarContinuous import MountainCarContinuousEnv
+from envs.LunarLander import LunarLanderEnv
+from envs.Acrobot import AcrobotEnv
+from envs.Pendulum import PendulumEnv
 
 CartPole = dict(
     epsilon_min = 0.05,
