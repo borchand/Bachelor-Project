@@ -5,9 +5,11 @@ from huggingface_sb3 import load_from_hub
 from icml_2019_state_abstraction.mac.ActionWrapper import discretizing_wrapper
 from stable_baselines3 import PPO, A2C, DQN, SAC, TD3, DDPG
 from stable_baselines3.common.evaluation import evaluate_policy
+from stable_baselines3.common.callbacks import StopTrainingOnMaxEpisodes
 import pandas as pd
 import numpy as np
 import argparse
+import time
 # Allow the use of `pickle.load()` when downloading model from the hub
 # Please make sure that the organization from which you download can be trusted
 os.environ["TRUST_REMOTE_CODE"] = "True"
@@ -34,7 +36,7 @@ def _get_model_class(algo_name):
         return DDPG
     else:
         raise ValueError('Invalid algorithm name')
-def get_save_name(algo_name, env_name, timesteps, k=None):
+def get_save_name(env_name, algo_name, episodes, k=None):
     """
     Args:
         :param algo_name (str): Name of the algorithm
@@ -45,14 +47,14 @@ def get_save_name(algo_name, env_name, timesteps, k=None):
         save_name (str): Name of the file to save the model as
     """
     continuous_action_envs = ["MountainCarContinuous-v0", "Pendulum-v1", "Pendulum-v0", "LunarLanderContinuous-v2"]
-    save_name = "rl-trained-agents/"+ str(timesteps) + '/' 
+    save_name = "rl-trained-agents/"+ str(episodes) + '/' 
     
     # If the action space is discretized, add the number of bins to the save name
     if k > 1 and env_name in continuous_action_envs:
         save_name += str(k) + "_"
     
-    save_name += algo_name + "_" + env_name 
-    
+    save_name += algo_name + "_" + env_name
+    print("this is the save name", save_name)
     return save_name
 
 def get_gym_env(env_name, render=False, k=20):
@@ -72,7 +74,7 @@ def get_gym_env(env_name, render=False, k=20):
 
     return gym_env
 
-def main(env_name, algo_name, timesteps = 100_000, k=20, render=False, save=True, train=True):
+def main(env_name, algo_name, episodes = 200, k=20, render=False, save=True, train=True):
     """
     Args:
         :param env_name (str): Name of the environment
@@ -84,22 +86,36 @@ def main(env_name, algo_name, timesteps = 100_000, k=20, render=False, save=True
         :param train = True (bool): If True, train the model
     """
     env = get_gym_env(env_name, render, k)
-    save_name = get_save_name(algo_name, env_name, timesteps, k=k)
+    save_name = get_save_name(env_name, algo_name, episodes, k=k)
 
     # get the model class from the algo name
     model_class = _get_model_class(algo_name)
 
     # create the model
     model = model_class("MlpPolicy", env=env, verbose=1)
-
-    # model learn the env
-    if train:
-        model.learn(total_timesteps=timesteps, log_interval=5)
-    # save the model
     
-    if save:
-        model.save(save_name)
+    if train:
+        # callback to stop training after max episodes
+        callback_max_episodes = StopTrainingOnMaxEpisodes(max_episodes=episodes, verbose=1)
+        
+        # get max number of steps in a episode
+        max_timesteps = env._max_episode_steps * episodes
+        
+        # model learn the env
+        state_time = time.time()
+        model.learn(total_timesteps=max_timesteps, log_interval=5, callback=callback_max_episodes)
+        end_time = time.time()
 
+        training_time = end_time - state_time
+        # This is the number o
+        timesteps = model.num_timesteps
+    # save the model
+    if save and train:
+        
+        model.save(save_name)
+        with open(save_name + "_time.txt", 'w') as f:
+            f.write(str(training_time))
+        
 
     if render:
         model = model.load(save_name, env=env)
@@ -115,10 +131,10 @@ def main(env_name, algo_name, timesteps = 100_000, k=20, render=False, save=True
                 break
             env.render()
 
-def show_model(env_name, algo_name):
+def show_model(env_name, algo_name, episodes=200, k=None):
 
     eval_env = gym.make(env_name, render_mode='human')
-    save_name = "./rl-trained-agents/"+ algo_name + "_" + env_name
+    save_name = get_save_name(env_name, algo_name, episodes, k=k)
     
     model = _get_model_class(algo_name)
     model = model.load(save_name, env=eval_env)
@@ -139,7 +155,7 @@ if __name__ == "__main__":
     
     parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
     parser.add_argument('-a', '--algo', default='ppo', help='Algorithm to use when training')
-    # parser.add_argument('-ep', '--episodes', default=100, help='Number of episodes to train the model for', type=int)
+    parser.add_argument('-ep', '--episodes', default=100, help='Number of episodes to train the model for', type=int)
     parser.add_argument('-t', '--time-steps', default=None, help='Number of time steps to train the model for', type=int)
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-k', '--k-bins',  default=20 , help='Discretize the action space into k bins', type=int)
@@ -153,14 +169,14 @@ if __name__ == "__main__":
     
     # Render the model
     if args.show == 't':
-        show_model(args.env, args.algo)
+        show_model(args.env, args.algo, episodes=args.episodes, k=args.k_bins)
         
     else:
         # Else just train the model
         main(
             env_name=args.env,
             algo_name=args.algo,
-            timesteps=args.time_steps,
+            episodes=args.episodes,
             render=args.render == 't',
             save=args.save == 't',
             train=args.train == 't',

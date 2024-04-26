@@ -10,7 +10,7 @@ import baselines
 import argparse
 
 
-def main(gym_name: str, algo: str, time_steps: int, k_bins=1, train=True, run_experiment=True, abstraction=True, load_model=False, render=False, save=True):
+def main(gym_name: str, algo: str, episodes: int, k_bins=1, train=True, run_experiment=True, abstraction=True, load_model=False, render=False, save=True):
 
     """
     Args:
@@ -34,16 +34,16 @@ def main(gym_name: str, algo: str, time_steps: int, k_bins=1, train=True, run_ex
         print("running training of algorithm: ", algo, "in environment: ", gym_name)
         run.main(
             env_name=gym_name,
-            time_steps=time_steps,
+            episodes=episodes,
             k_bins=k_bins)
     
     elif train:
         
-        print("Running training of algorithm: ", algo, "in environment: ", gym_name, "for ", time_steps, "time steps.")
+        print("Running training of algorithm: ", algo, "in environment: ", gym_name, "for ", episodes, "episodes.")
         baselines.main(
             env_name=gym_name,
             algo_name=algo,
-            timesteps=time_steps,
+            episodes=episodes,
             k=k_bins,
             render=render,
             save=save,
@@ -59,7 +59,7 @@ def main(gym_name: str, algo: str, time_steps: int, k_bins=1, train=True, run_ex
             k_bins=k_bins,
             abstraction=abstraction,
             load_model=load_model,
-            policy_train_steps=time_steps,
+            policy_train_steps=episodes,
             run_expiriment=run_experiment)
 
 def show_model(gym_name: str, algo: str):
@@ -74,6 +74,7 @@ if __name__ == "__main__":
     parser.add_argument('-a', '--algo', default='ppo', choices=['mac', 'dqn', 'ppo', 'sac'], help='Algorithm to use when training')
     parser.add_argument('-t', '--time-steps', default=100_000, help='Number of time steps to train the model for', type=int)
     parser.add_argument('-k', '--k-bins', default=1, help='Number of bins to discretize the action space', type=int)
+    parser.add_argument('-ep', '--episodes', default=100, help='Number of episodes to train the model for', type=int)
 
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-ex', '--experiment', choices=['t', 'f'], default='t', help='Run the learning experiment')
@@ -89,7 +90,7 @@ if __name__ == "__main__":
     main(
         gym_name=args.env,
         algo=args.algo,
-        time_steps=args.time_steps,
+        episodes=args.e,
         abstraction=args.abstraction == 't',
         train=args.train == 't',
         load_model=args.load == 't',
