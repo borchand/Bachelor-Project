@@ -3,12 +3,13 @@ import os
 sys.path.append("./icml_2019_state_abstraction/experiments")
 sys.path.append("./icml_2019_state_abstraction/experiments/simple_rl")
 sys.path.append("./icml_2019_state_abstraction/experiments/abstraction")
+sys.path.append("./Code/icml/")
 import icml_2019_state_abstraction.mac.run as run
 import icml_2019_state_abstraction.experiments.run_learning_experiment as run_learning_experiment
 from icml_2019_state_abstraction.experiments import run_learning_experiment
 import baselines
 import argparse
-
+import Code.icml.config
 
 def main(gym_name: str, algo: str, episodes: int, k_bins=1, train=True, run_experiment=True, abstraction=True, load_model=False, render=False, save=True):
 
@@ -59,7 +60,7 @@ def main(gym_name: str, algo: str, episodes: int, k_bins=1, train=True, run_expe
             k_bins=k_bins,
             abstraction=abstraction,
             load_model=load_model,
-            policy_train_steps=episodes,
+            policy_train_episodes=episodes,
             run_expiriment=run_experiment)
 
 def show_model(gym_name: str, algo: str):
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     main(
         gym_name=args.env,
         algo=args.algo,
-        episodes=args.e,
+        episodes=args.episodes,
         abstraction=args.abstraction == 't',
         train=args.train == 't',
         load_model=args.load == 't',
