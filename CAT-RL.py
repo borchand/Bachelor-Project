@@ -109,7 +109,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Set options for training and rendering CAT_RL')
     parser.add_argument('-t', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='t', help='Render the model')
-    parser.add_argument('-s', '--seed', type=int, default=None, help='Seed for the model')
+    parser.add_argument('-s', '--seed', type=int, default=None, help='Seed for the model. If rendering, provide the seed of the model to render')
     # choose the environment to train and render
     parser.add_argument('-e', '--env', default='MountainCar', choices=['MountainCar', 'MountainCarContinuous','CartPole', 'LunarLander', 'Acrobot', 'Pendulum'], help='Choose the environment to train and render')
     args = parser.parse_args()
