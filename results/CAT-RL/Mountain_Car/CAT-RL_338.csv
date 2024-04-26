@@ -1,0 +1,2 @@
+,episode,reward,epochs,epsilon,abs_size,rate,success
+0,1,854.0,147,0.9,4,1.0,True

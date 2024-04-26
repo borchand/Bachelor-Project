@@ -43,16 +43,36 @@ There are also some optional arguments you can use:
 - `--render` or `-r` to render the model
     - default: `t` (True)
     - options: `t, f` (True, False)
+- `--seed` or `-s` to specify the seed. If rendering without training, you need to set the seed of the trained model
+    - default: `0
 - `--help` or `-h` to get help
 
 For example, to run the `CartPole-v1` environment without rendering the model, you can use the following command:
 ```
 python CAT-RL.py -r f -e CartPole
 ```
-or to just render a trained model from the `CartPole-v1` environment, you can use the following command:
+or to just render a trained model with seed 123 from the `CartPole-v1` environment, you can use the following command:
 ```
-python CAT-RL.py -t f -e CartPole
+python CAT-RL.py -t f -e CartPole -s 123
 ```
+
+# Trained models
+
+The trained models for the different environments can be found in the `models` folder. The models are saved as `.pkl` files and can be loaded using the `pickle` library in Python.
+
+## CAT_RL
+
+### CartPole-v1
+
+### MountainCar-v0
+
+### LunarLander-v2
+
+### Acrobot-v1
+
+### MountainCarContinuous-v0
+
+### Pendulum-v0
 
 
 <!-- # Docker stuff (might not need)
