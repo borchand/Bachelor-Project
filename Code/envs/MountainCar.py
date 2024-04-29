@@ -16,6 +16,13 @@ class MountainCarEnv(BaseEnv):
         success = False
         done = False
 
+        # extra reward based on velocity
+        x, velocity = new_state
+
+
+        reward += 100 * abs(velocity)
+        
+
         if terminated:
             reward = 1000 
             success = True

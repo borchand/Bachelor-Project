@@ -9,55 +9,7 @@ sys.path.append('Code/CATRL/envs/')
 
 from CATRL.method_catrl import train_CAT_RL
 from Code.CATRL.config import *
-
-def save_log(log_data, log_info):
-    # create folder results if it does not exist
-    if not os.path.exists("results/"):
-        os.makedirs("results/")
-
-    # create folder results/agent if it does not exist
-    if not os.path.exists("results/" + log_info["agent"][0]):
-        os.makedirs("results/" + log_info["agent"[0]])
-
-    # create folder results/agent/env if it does not exist
-    if not os.path.exists("results/" + log_info["agent"][0] + "/" + log_info["env"][0]):
-        os.makedirs("results/" + log_info["agent"][0] + "/" + log_info["env"][0])
-
-    df = pd.DataFrame(log_data)
-
-    df.to_csv("results/" + log_info["agent"][0] + "/" + log_info["env"][0] + "/" + log_info["agent"][0] + "_" + str(log_info["seed"][0]) + ".csv")
-
-    df_info = pd.DataFrame(log_info)
-
-    df_info.to_csv("results/" + log_info["agent"][0] + "/" + log_info["env"][0] + "/" + log_info["agent"][0] + "_" + str(log_info["seed"][0]) + "_info.csv")
-
-def save_model(agent, abstract, log_info):
-    # create folder models if it does not exist
-    if not os.path.exists("models/"):
-        os.makedirs("models/")
-
-    # create folder models/agent if it does not exist
-    if not os.path.exists("models/" + log_info["agent"][0]):
-        os.makedirs("models/" + log_info["agent"][0])
-
-    # create folder models/agent/env if it does not exist
-    if not os.path.exists("models/" + log_info["agent"][0] + "/" + log_info["env"][0]):
-        os.makedirs("models/" + log_info["agent"][0] + "/" + log_info["env"][0])
-
-    file_name = log_info["agent"][0] + "/" + log_info["env"][0] + "/" + log_info["agent"][0] + "_" + str(log_info["seed"][0])
-
-    # save the agent and abstraction
-    pickle.dump(agent, open("models/" + file_name + "_agent.pkl", "wb"))
-    pickle.dump(abstract, open("models/" + file_name + "_abs.pkl", "wb"))
-
-def load_model(agent_name, env, seed):
-
-    file_name = agent_name + "/" + env + "/" + agent_name + "_" + str(seed)
-
-    # load the agent and abstraction
-    agent = pickle.load(open("models/" + file_name + "_agent.pkl", "rb"))
-    abstract = pickle.load(open("models/" + file_name + "_abs.pkl", "rb"))
-    return agent, abstract
+from Code.utils import save_log, save_model, save_abstraction, load_model, load_abstraction
 
 def show_model(agent, abstract, env):
     for i in range(1):
@@ -84,7 +36,7 @@ def main(config, seed=None):
     env = config['env']
     bootstrap = config['bootstrap'] 
 
-    agent, abstract, log_data, log_info = train_CAT_RL(
+    agent, abstraction, log_data, log_info = train_CAT_RL(
         map_name,
         step_max,
         episode_max,
@@ -98,10 +50,11 @@ def main(config, seed=None):
         seed=seed
     )
 
-    save_model(agent, abstract, log_info)
+    save_model(agent, log_info)
+    save_abstraction(abstraction, log_info)
     save_log(log_data, log_info)
 
-    return agent, abstract
+    return agent, abstraction
 
 
 if __name__ == "__main__":
@@ -134,7 +87,7 @@ if __name__ == "__main__":
 
     if args.train == 't':
         print("Training the model")
-        agent, abstract = main(config)
+        agent, abstraction = main(config, seed=args.seed)
 
     if args.render == 't':
         print("Rendering the model")
@@ -143,6 +96,7 @@ if __name__ == "__main__":
             sys.exit()
         
         if args.train != 't':
-            agent, abstract = load_model("CAT-RL", config['map_name'], args.seed)
+            agent = load_model("CAT-RL", config['map_name'], args.seed)
+            abstraction = load_abstraction("CAT-RL", config['map_name'], args.seed)
         
-        show_model(agent, abstract, config['renderEnv'])
+        show_model(agent, abstraction, config['renderEnv'])
