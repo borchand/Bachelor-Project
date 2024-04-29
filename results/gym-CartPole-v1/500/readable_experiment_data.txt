@@ -1,0 +1,9 @@
+(MDP)
+	gym-CartPole-v1
+(Agents)
+	Q-learning_phi_mac_42,0
+(Params)
+	instances : 1
+	episodes : 500
+	steps : 200
+	track_disc_reward : False
