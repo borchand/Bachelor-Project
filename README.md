@@ -72,7 +72,7 @@ The trained models for the different environments can be found in the `models` f
 
 ### MountainCarContinuous-v0
 
-### Pendulum-v0
+### Pendulum-v1
 
 
 <!-- # Docker stuff (might not need)

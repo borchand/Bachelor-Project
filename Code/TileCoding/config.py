@@ -64,7 +64,7 @@ Acrobot = dict(
 Pendulum = dict(
     name = "Pendulum",
     step_max = 200,
-    map_name = "Pendulum-v0",
+    map_name = "Pendulum-v1",
     env = PendulumEnv(),
     renderEnv = PendulumEnv(render=True),
     tiling_specs = [(tuple(10 for _ in range(3)), (-1.0, 0, 1.0))],

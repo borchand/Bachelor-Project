@@ -88,7 +88,7 @@ Acrobot = dict(
 Pendulum = dict(
     name = "Pendulum",
     step_max = 200,
-    map_name = "Pendulum-v0",
+    map_name = "Pendulum-v1",
     env = PendulumEnv(),
     renderEnv = PendulumEnv(render=True),
     episodes = 200,
