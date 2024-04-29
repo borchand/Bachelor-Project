@@ -1,7 +1,7 @@
 (MDP)
 	gym-LunarLander-v2
 (Agents)
-	Q-learning_phi_mac_42,0
+	Q-learning_phi_ppo_42,0
 (Params)
 	instances : 1
 	episodes : 500

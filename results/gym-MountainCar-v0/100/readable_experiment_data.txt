@@ -5,5 +5,5 @@
 (Params)
 	instances : 1
 	episodes : 100
-	steps : 20
+	steps : 200
 	track_disc_reward : False
