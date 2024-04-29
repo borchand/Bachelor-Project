@@ -13,7 +13,7 @@
     },
     "MISC": {
         "instances": 1,
-        "episodes": 5,
+        "episodes": 100,
         "steps": 20,
         "track_disc_reward": false
     },

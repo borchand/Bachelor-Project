@@ -6,10 +6,12 @@ from icml_2019_state_abstraction.mac.ActionWrapper import discretizing_wrapper
 from stable_baselines3 import PPO, A2C, DQN, SAC, TD3, DDPG
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.callbacks import StopTrainingOnMaxEpisodes
+from stable_baselines3.common.utils import set_random_seed
 import pandas as pd
 import numpy as np
 import argparse
 import time
+import random
 # Allow the use of `pickle.load()` when downloading model from the hub
 # Please make sure that the organization from which you download can be trusted
 os.environ["TRUST_REMOTE_CODE"] = "True"
@@ -74,7 +76,7 @@ def get_gym_env(env_name, render=False, k=20):
 
     return gym_env
 
-def main(env_name, algo_name, episodes = 200, k=20, render=False, save=True, train=True):
+def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render=False, save=True, train=True):
     """
     Args:
         :param env_name (str): Name of the environment
@@ -87,6 +89,10 @@ def main(env_name, algo_name, episodes = 200, k=20, render=False, save=True, tra
     """
     env = get_gym_env(env_name, render, k)
     save_name = get_save_name(env_name, algo_name, episodes, k=k)
+    
+    ## set random seed
+    random.seed(seed)
+    set_random_seed(seed)
 
     # get the model class from the algo name
     model_class = _get_model_class(algo_name)
@@ -155,11 +161,13 @@ if __name__ == "__main__":
     
     parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
     parser.add_argument('-a', '--algo', default='ppo', help='Algorithm to use when training')
+    
     parser.add_argument('-ep', '--episodes', default=100, help='Number of episodes to train the model for', type=int)
     parser.add_argument('-t', '--time-steps', default=None, help='Number of time steps to train the model for', type=int)
-    parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-k', '--k-bins',  default=20 , help='Discretize the action space into k bins', type=int)
+    parser.add_argument('-seed', '--seed', default=42, help='Seed for reproducibility', type=int)
 
+    parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='f', help='Render the model')
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     

@@ -10,13 +10,13 @@ from icml_2019_state_abstraction.experiments import run_learning_experiment
 import baselines
 import argparse
 import Code.icml.config
-
 def main(
         gym_name: str,
         algo: str,
         policy_episodes: int,
         experiment_episodes: int,
-        k_bins=1,
+        k_bins: int,
+        seed: int,
         train=True,
         run_experiment=True,
         abstraction=True,
@@ -28,7 +28,10 @@ def main(
     Args:
         :param gym_name (str): Name of the environment
         :param algo (str): Name of the algorithm
-        :param time_steps (int): Number of time steps to train the model for
+        :param policy_episodes (int): Number of episodes to train the model for
+        :param experiment_episodes (int): Number of episodes to run the experiement for
+        :param k_bins (int): Number of bins to discretize the action space
+        :param seed (int): Seed for reproducibility
         :param train = True (bool): If True, train the model
         :param run_experiment = True (bool): If True, run the learning experiment
         :param abstraction = True (bool): If True, use state abstraction
@@ -40,6 +43,10 @@ def main(
         Run the training of the model and the learning experiment
     """
     
+    continuous_action_envs = ['Pendulum-v1', 'MountainCarContinuous-v0', 'LunarLanderContinuous-v2']
+    if gym_name in continuous_action_envs:
+        assert k_bins > 1, "Action space must be discretized for continuous action environments."
+    assert "-" in gym_name, "Remember to use the correct gym name. with version number."
     ## run training of policy
     if train and algo == 'mac':
         
@@ -47,7 +54,9 @@ def main(
         run.main(
             env_name=gym_name,
             episodes=policy_episodes,
-            k_bins=k_bins)
+            k_bins=k_bins,
+            seed=seed
+            )
     
     elif train:
         
@@ -57,6 +66,7 @@ def main(
             algo_name=algo,
             episodes=policy_episodes,
             k=k_bins,
+            seed=seed,
             render=render,
             save=save,
             train=train)
@@ -69,6 +79,7 @@ def main(
             env_name=gym_name,
             algo=algo,
             k_bins=k_bins,
+            seed=seed,
             abstraction=abstraction,
             load_model=load_model,
             policy_train_episodes=policy_episodes,
@@ -88,6 +99,7 @@ if __name__ == "__main__":
     parser.add_argument('-k', '--k-bins', default=1, help='Number of bins to discretize the action space', type=int)
     parser.add_argument('-pep', '--policy_episodes', default=100, help='Number of episodes to train the model for', type=int)
     parser.add_argument('-eep', '--experiment_episodes', default=100, help='Number of episodes to train the model for', type=int)
+    parser.add_argument('-seed', '--seed', default=42, help='Seed for reproducibility', type=int)
 
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-ex', '--experiment', choices=['t', 'f'], default='t', help='Run the learning experiment')
@@ -106,6 +118,7 @@ if __name__ == "__main__":
         policy_episodes=args.policy_episodes,
         experiment_episodes=args.experiment_episodes,
         abstraction=args.abstraction == 't',
+        seed=args.seed,
         train=args.train == 't',
         load_model=args.load == 't',
         render=args.render == 't',

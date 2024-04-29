@@ -1,2 +1,2 @@
-,success_rate,training_time,episodes,seed,agent
-0,0.0,5.4376860618591305,5,42,icml_100_ppo
+,agent,episodes,total_steps,success_rate,training_time,seed
+0,icml_100_ppo,5,100,0.0,4.421602977752686,42
