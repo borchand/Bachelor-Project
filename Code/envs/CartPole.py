@@ -35,7 +35,7 @@ class CartPoleEnv(BaseEnv):
             else:
                 reward = -1000
 
-        return new_state.tolist(), reward, done, success
+        return self.scale_state(new_state.tolist()), reward, terminated, success
     
     def reset(self):
         self.steps = 0
