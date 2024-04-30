@@ -10,7 +10,7 @@ class PendulumEnv(ContinuousActionBaseEnv):
     def __init__(self, render=False):
         super().__init__(
             EnvType.Pendulum.value,
-            40,
+            4,
             render=render)
 
     def step(self, action):  
@@ -21,12 +21,16 @@ class PendulumEnv(ContinuousActionBaseEnv):
         done = False
 
         x, y, velocity = new_state
-        
+        if abs(y) < 0.2 and x > 0 and abs(velocity) < 0.2:
+                success = True
+                reward += 10
+
+
         if truncated:
             done = True
 
             # success if the pendulum is upright or close to upright and velocity is low
-            if abs(y) < 0.1 and abs(velocity) < 0.1:
+            if abs(y) < 0.1 and x > 0 and abs(velocity) < 0.1:
                 success = True
                 reward += 1000
 
