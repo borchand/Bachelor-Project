@@ -1,6 +1,16 @@
+# Disabling warnings. This only done because of the use of tqdm in the code.
+# To see warnings, run the individual files
+def warn(*args, **kwargs):
+    pass
+import warnings
+warnings.warn = warn
+warnings.filterwarnings('ignore')
+
 import sys
 from tqdm import tqdm
 import argparse
+import random
+
 
 sys.path.append('CATRL/')
 
@@ -26,12 +36,15 @@ from Code.CATRL.config import Acrobot as CATRLAcrobot, CartPole as CATRLCartPole
 
 def main(run_exp_num = 20):
 
-    episodes_per_env = [1000, 1000, 500, 500, 2000, 1000] 
+    episodes_per_env = [10, 10, 10, 10, 10, 10] 
+
+    # create seeds
+    seeds = random.sample(range(1000), run_exp_num)
     
     # Tile Coding
     congifs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TileLunarLander, TilePendulum]
 
-    print("Running Tile Coding")
+    print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
     for config, episodes in zip(congifs, episodes_per_env):
         print("Running ", config['name'])
 
@@ -40,32 +53,38 @@ def main(run_exp_num = 20):
 
         for i in tqdm(range(run_exp_num)):
             agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
-            run_tileCoding(env, agent, episodes, config['map_name'], verbose=False)
+            run_tileCoding(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
 
     # Bin Q Learning
     congifs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinLunarLander, BinPendulum]
 
+
+    print('\n' + '{:_^40}'.format("Running bins") + '\n')
+
     for config, episodes in zip(congifs, episodes_per_env):
         print("Running ", config['map_name'])
 
         env = config['env']
 
         for i in tqdm(range(run_exp_num)):
-            agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], verbose=False)
+            agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], seed=seeds[i], verbose=False)
 
-            run_binQ(env, agent, episodes, config['map_name'], verbose=False)
+            run_binQ(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
 
     # CATRL
     congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLLunarLander, CATRLPendulum]
     
+
+    print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
+
     for config, episodes in zip(congifs, episodes_per_env):
 
         print("Running ", config['map_name'])
 
         env = config['env']
-        config['episodes'] = episodes
+        config['episode_max'] = episodes
         for i in tqdm(range(run_exp_num)):
-            run_CATRL(config, seed=None, verbose=False)
+            run_CATRL(config, seed=seeds[i], verbose=False)
 
     print("Running Bin Q Learning")
 
