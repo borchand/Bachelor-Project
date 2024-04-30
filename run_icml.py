@@ -22,7 +22,8 @@ def main(
         abstraction=True,
         load_model=False,
         render=False,
-        save=True):
+        save=True,
+        verbose=False):
 
     """
     Args:
@@ -55,8 +56,8 @@ def main(
             env_name=gym_name,
             episodes=policy_episodes,
             k_bins=k_bins,
-            seed=seed
-            )
+            seed=seed,
+            verbose=verbose)
     
     elif train:
         
@@ -84,7 +85,8 @@ def main(
             load_model=load_model,
             policy_train_episodes=policy_episodes,
             experiment_episodes=experiment_episodes,
-            run_expiriment=run_experiment)
+            run_expiriment=run_experiment,
+            verbose=verbose)
 
 def show_model(gym_name: str, algo: str):
     pass
@@ -109,7 +111,8 @@ if __name__ == "__main__":
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='f', help='Render the model')
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     parser.add_argument('-sh', '--show', choices=['t', 'f'], default='f', help='Show the model')
-
+    parser.add_argument('-v', '--verbose', choices=['t', 'f'], default='f', help='Verbose output')
+    
     args = parser.parse_args()
     
     main(
@@ -124,4 +127,5 @@ if __name__ == "__main__":
         render=args.render == 't',
         save=args.save == 't',
         run_experiment=args.experiment == 't',
-        k_bins=args.k_bins)
+        k_bins=args.k_bins,
+        verbose=args.verbose == 't')
