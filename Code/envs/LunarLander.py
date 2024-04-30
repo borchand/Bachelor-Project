@@ -8,12 +8,19 @@ class LunarLanderEnv(BaseEnv):
     """
     def __init__(self, render=False):
         super().__init__(EnvType.Lunar_Lander.value, render=render)
+        self.episode_reward = 0
+
+    def reset(self):
+        self.episode_reward = 0
+        return super().reset()
 
     def step(self, action):  
-        new_state, reward, terminated, _, _ = super().step(action)
+        new_state, reward, terminated, truncated, _ = super().step(action)
         new_state = np.clip(new_state, a_min=self._env.observation_space.low, a_max=self._env.observation_space.high)
         self.log_r.append(reward)
 
-        success = not self._env.lander.awake
-            
-        return self.scale_state(new_state.tolist()), reward, terminated, success
+        self.episode_reward += reward
+
+        success = self.episode_reward >= 200
+
+        return self.scale_state(new_state.tolist()), reward, terminated or truncated, success
