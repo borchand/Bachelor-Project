@@ -5,7 +5,7 @@ class QLearningAgent:
     """Q-Learning agent that can act on a continuous state space by discretizing it."""
 
     def __init__(self, env, bins, alpha=0.02, gamma=0.99,
-                 epsilon=1.0, epsilon_decay_rate=0.9995, min_epsilon=.01, seed=505):
+                 epsilon=1.0, epsilon_decay_rate=0.9995, min_epsilon=.01, seed=505, verbose=False):
         
         """Initialize variables, create grid for discretization."""
         # Environment info
@@ -17,13 +17,16 @@ class QLearningAgent:
         self.bins = bins
 
         self.state_grid = self.create_state_grid()
-        print("State grid:", self.state_grid)
+        if verbose:
+            print("State grid:", self.state_grid)
+            
         self.state_size = tuple(len(splits) + 1 for splits in self.state_grid)  # n-dimensional state space
         self.action_size = self.env.action_space.n  # 1-dimensional discrete action space
         self.seed = np.random.seed(seed)
-        print("Environment:", self.env)
-        print("State space size:", self.state_size)
-        print("Action space size:", self.action_size)
+        if verbose:
+            print("Environment:", self.env)
+            print("State space size:", self.state_size)
+            print("Action space size:", self.action_size)
         
         # Learning parameters
         self.alpha = alpha  # learning rate
@@ -34,7 +37,8 @@ class QLearningAgent:
         
         # Create Q-table
         self.q_table = np.zeros(shape=(self.state_size + (self.action_size,)))
-        print("Q table size:", self.q_table.shape)
+        if verbose:
+            print("Q table size:", self.q_table.shape)
 
     def create_state_grid(self):
         state_grid = []

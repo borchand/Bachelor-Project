@@ -105,7 +105,7 @@ def tile_encode(sample, tilings, flatten=False):
 class QTable:
     """Simple Q-table."""
 
-    def __init__(self, state_size, action_size):
+    def __init__(self, state_size, action_size, verbose=False):
         """Initialize Q-table.
 
         Parameters
@@ -121,13 +121,14 @@ class QTable:
         # Note: If state_size = (9, 9), action_size = 2, q_table.shape should be (9, 9, 2)
 
         self.q_table = np.zeros(shape=(self.state_size + (self.action_size,)))
-        print("QTable(): size =", self.q_table.shape)
+        if verbose:
+            print("QTable(): size =", self.q_table.shape)
 
 
 class TiledQTable:
     """Composite Q-table with an internal tile coding scheme."""
 
-    def __init__(self, low, high, tiling_specs, action_size):
+    def __init__(self, low, high, tiling_specs, action_size, verbose=False):
         """Create tilings and initialize internal Q-table(s).
 
         Parameters
@@ -144,8 +145,9 @@ class TiledQTable:
         self.tilings = create_tilings(low, high, tiling_specs)
         self.state_sizes = [tuple(len(splits)+1 for splits in tiling_grid) for tiling_grid in self.tilings]
         self.action_size = action_size
-        self.q_tables = [QTable(state_size, self.action_size) for state_size in self.state_sizes]
-        print("TiledQTable(): no. of internal tables = ", len(self.q_tables))
+        self.q_tables = [QTable(state_size, self.action_size, verbose=verbose) for state_size in self.state_sizes]
+        if verbose:
+            print("TiledQTable(): no. of internal tables = ", len(self.q_tables))
 
     def get(self, state, action):
         """Get Q-value for given <state, action> pair.

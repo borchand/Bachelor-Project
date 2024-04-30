@@ -3,7 +3,7 @@ import sys
 import random
 import time
 import argparse
-
+from tqdm import tqdm
 sys.path.append('Code/TileCoding/')
 sys.path.append('Code/envs/')
 sys.path.append("CATRL/")
@@ -12,7 +12,7 @@ from Code.binQLearning.config import *
 from Code.utils import save_log, save_model, load_model
 from Code.binQLearning.agent import QLearningAgent
 
-def run_agent(env, agent, nEpisodes, env_name, seed=None):
+def run_agent(env, agent, nEpisodes, env_name, seed=None, verbose=False):
 
     log_data = {
         "episode": [],
@@ -52,7 +52,8 @@ def run_agent(env, agent, nEpisodes, env_name, seed=None):
             epochs += 1
             action = agent.act(state, reward, done)
 
-        print("Episode: ", i, "Reward: ", total_reward, "Epsilon: ", agent.epsilon, "epochs: ", epochs, "success: ", success)
+        if verbose:
+            print("Episode: ", i, "Reward: ", total_reward, "Epsilon: ", agent.epsilon, "epochs: ", epochs, "success: ", success)
 
         log_data["episode"].append(i)
         log_data["reward"].append(total_reward)
@@ -87,6 +88,7 @@ def show_model(env, agent):
             new_state, reward, done, success = env.step(action)
             state = new_state
 
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Set options for training and rendering TileCoding')
@@ -119,10 +121,10 @@ if __name__ == "__main__":
     
     if args.train == 't':
         print("Training the model")
-        
+
         agent = QLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], seed=args.seed)
 
-        trained_agent = run_agent(env, agent, config["episodes"], config['map_name'], args.seed)
+        trained_agent = run_agent(env, agent, config["episodes"], config['map_name'], args.seed, verbose=True)
 
     if args.render == 't':
         print("Rendering the model")

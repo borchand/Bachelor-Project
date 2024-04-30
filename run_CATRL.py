@@ -22,7 +22,7 @@ def show_model(agent, abstract, env):
             new_state, reward, done, success = env.step(action)
             state = new_state
 
-def main(config, seed=None):
+def main(config, seed=None, verbose=False):
 
     epsilon_min = config['epsilon_min']
     alpha = config['alpha']
@@ -47,7 +47,8 @@ def main(config, seed=None):
         epsilon_min,
         decay,
         k_cap,
-        seed=seed
+        seed=seed,
+        verbose=verbose
     )
 
     save_model(agent, log_info)
