@@ -1,9 +1,0 @@
-(MDP)
-	gym-MountainCar-v0
-(Agents)
-	Q-learning_phi_mac_42,0
-(Params)
-	instances : 1
-	episodes : 100
-	steps : 200
-	track_disc_reward : False

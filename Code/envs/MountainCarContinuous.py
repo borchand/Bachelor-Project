@@ -20,6 +20,11 @@ class MountainCarContinuousEnv(ContinuousActionBaseEnv):
         success = False
         done = False
 
+        # extra reward based on velocity
+        x, velocity = new_state
+
+        reward += 100 * abs(velocity)
+
         if terminated:
             success = True
             done = True
