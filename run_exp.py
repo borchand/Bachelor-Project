@@ -101,15 +101,6 @@ def main(run_exp_num = 20, verbose = False):
 
     
     
-    print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
-    mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlLunarLanderMAC, IcmlPendulumMAC]
-    for mac_config, episodes in zip(mac_configs, episodes_per_env):
-
-        print("Running ", mac_config['gym_name'])
-
-        mac_config['episode_max'] = episodes
-        for i in tqdm(range(run_exp_num)):
-            run_icml(mac_config, seed=seeds[i], verbose=False)
 
 
     print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
@@ -122,7 +113,16 @@ def main(run_exp_num = 20, verbose = False):
         for i in tqdm(range(run_exp_num)):
             run_icml(ppo_config, seed=seeds[i], verbose=False)
 
+    
+    print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
+    mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlLunarLanderMAC, IcmlPendulumMAC]
+    for mac_config, episodes in zip(mac_configs, episodes_per_env):
 
+        print("Running ", mac_config['gym_name'])
+
+        mac_config['episode_max'] = episodes
+        for i in tqdm(range(run_exp_num)):
+            run_icml(mac_config, seed=seeds[i], verbose=False)
 
     
 if __name__ == "__main__":
