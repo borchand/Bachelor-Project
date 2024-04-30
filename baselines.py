@@ -104,7 +104,7 @@ class RewardShapingWrapper(gym.Wrapper):
         if self.reward_shaping is not None:
             reward = self.reward_shaping(obs)
         
-        if terminated or truncated and self.reward_shaping_end is not None:
+        if (terminated or truncated) and self.reward_shaping_end is not None:
             reward = self.reward_shaping_end(obs, terminated, truncated)
 
         return obs, reward, terminated, truncated, info
@@ -171,7 +171,7 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
         :param save = True (bool): If True, save the trained model
         :param train = True (bool): If True, train the model
     """
-    env = get_gym_env(env_name, render, k)
+    env = get_gym_env(env_name, render=False, k=k)
     save_name = get_save_name(env_name, algo_name, episodes, k=k)
     env = RewardShapingWrapper(env)
     ## set random seed
@@ -186,9 +186,9 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
     
     if train:
         # callback to stop training after max episodes
-        callback_progress_bar = ProgressBarCallback()
+        # callback_progress_bar = ProgressBarCallback()
         callback_max_episodes = StopTrainingOnMaxEpisodes(max_episodes=episodes, verbose=1)
-        callback_list = CallbackList([callback_progress_bar, callback_max_episodes])
+        callback_list = CallbackList([callback_max_episodes])
         # get max number of steps in a episode
         max_timesteps = env.env._max_episode_steps * episodes
         
@@ -209,6 +209,7 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
         
 
     if render:
+        env = get_gym_env(env_name, render=True, k=k)
         model = model.load(save_name, env=env)
 
         model.set_env(env)
@@ -249,11 +250,11 @@ if __name__ == "__main__":
     
     parser.add_argument('-ep', '--episodes', default=100, help='Number of episodes to train the model for', type=int)
     parser.add_argument('-t', '--time-steps', default=None, help='Number of time steps to train the model for', type=int)
-    parser.add_argument('-k', '--k-bins',  default=20 , help='Discretize the action space into k bins', type=int)
+    parser.add_argument('-k', '--k-bins',  default=1 , help='Discretize the action space into k bins', type=int)
     parser.add_argument('-seed', '--seed', default=42, help='Seed for reproducibility', type=int)
 
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
-    parser.add_argument('-r', '--render', choices=['t', 'f'], default='f', help='Render the model')
+    parser.add_argument('-r', '--render', choices=['t', 'f'], default='t', help='Render the model')
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     
     parser.add_argument('-sh', '--show', choices=['t', 'f'], default='f', help='Show the model')
@@ -271,6 +272,7 @@ if __name__ == "__main__":
             algo_name=args.algo,
             episodes=args.episodes,
             render=args.render == 't',
+            seed=args.seed,
             save=args.save == 't',
             train=args.train == 't',
             k=args.k_bins)
