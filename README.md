@@ -10,6 +10,11 @@ Some tasks from OpenAI Gym uses `Box2D`. For this to work you need to isnstall s
 brew install swig
 ```
 
+To initialize submodules run this command
+```
+git submodule update --init --recursive
+```
+
 When you have swig installed, you can install the required packages using the following command:
 ```
 pip install -r requirements.txt
