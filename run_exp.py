@@ -33,6 +33,7 @@ sys.path.append('Code/CATRL/')
 
 from Code.CATRL.config import Acrobot as CATRLAcrobot, CartPole as CATRLCartPole, MountainCar as CATRLMountainCar, MountainCarContinuous as CATRLMountainCarContinuous, LunarLander as CATRLLunarLander, Pendulum as CATRLPendulum
 
+from Code.icml.training_config_mac import ACROBOT as IcmlAcrobot, CARTPOLE as IcmlCartPole, MOUNTAIN_CAR as IcmlMountainCar, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuous, LUNAR_LANDER as IcmlLunarLander, PENDULUM as IcmlPendulum
 
 def main(run_exp_num = 20):
 
@@ -86,8 +87,11 @@ def main(run_exp_num = 20):
         for i in tqdm(range(run_exp_num)):
             run_CATRL(config, seed=seeds[i], verbose=False)
 
-    print("Running Bin Q Learning")
+    
+    print('\n' +'{:_^40}'.format("Running Icml") + '\n')
 
+
+    
 if __name__ == "__main__":
 
     # args

@@ -95,6 +95,38 @@ def main(
             run_expiriment=run_experiment,
             verbose=verbose)
 
+def main_with_config(config: dict, seed=None, verbose=False):
+    
+    gym_name=config['env_name'],
+    algo=config['algo'],
+    policy_episodes=config['policy_episodes'],
+    experiment_episodes=config['experiment_episodes'],
+    k_bins=config['k_bins'],
+    seed=config['seed'],
+    train=config['train'],
+    run_experiment=config['run_experiment'],
+    abstraction=config['abstraction'],
+    load_model=config['load_model'],
+    render_policy=config['render_policy'],
+    render_experiment=config['render_experiment'],
+
+    main(
+        gym_name=gym_name,
+        algo=algo,
+        policy_episodes=policy_episodes,
+        experiment_episodes=experiment_episodes,
+        k_bins=k_bins,
+        train=train,
+        run_experiment=run_experiment,
+        abstraction=abstraction,
+        load_model=load_model,
+        render_policy=render_policy,
+        render_experiment=render_experiment,
+        save=save,
+        seed=seed,
+        verbose=verbose
+    )
+
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description='Set options for training and rendering icml')
