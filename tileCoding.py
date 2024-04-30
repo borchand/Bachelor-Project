@@ -12,7 +12,7 @@ from Code.TileCoding.config import *
 from Code.TileCoding.agent import *
 from Code.utils import save_log, save_model, load_model
 
-def run_agent(env, agent, nEpisodes, env_name, seed=None):
+def run_agent(env, agent, nEpisodes, env_name, seed=None, verbose=False):
     
     log_data = {
         "episode": [],
@@ -55,7 +55,8 @@ def run_agent(env, agent, nEpisodes, env_name, seed=None):
             state = new_state
 
             if done:
-                print("Episode: ", i, "Reward: ", ret, "Epsilon: ", agent.epsilon, "epochs: ", epochs, "success: ", success)
+                if verbose:
+                    print("Episode: ", i, "Reward: ", ret, "Epsilon: ", agent.epsilon, "epochs: ", epochs, "success: ", success)
 
                 break
 
@@ -123,11 +124,10 @@ if __name__ == "__main__":
 
     tiling_specs = config['tiling_specs']
 
-
     if args.train == 't':
         print("Training the model")
-        agent = Agent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs)
-        trained_agent = run_agent(env, agent, config["episodes"], config['map_name'], args.seed)
+        agent = Agent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=True)
+        trained_agent = run_agent(env, agent, config["episodes"], config['map_name'], args.seed, verbose=True)
 
     if args.render == 't':
         print("Rendering the model")

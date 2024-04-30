@@ -2,16 +2,17 @@
 from tiles import *
 
 class Agent:
-    def __init__(self, env_info, tiling_specs, alpha=0.1, gamma=0.99):
+    def __init__(self, env_info, tiling_specs, alpha=0.1, gamma=0.995, verbose=False):
         self.nA = env_info[0]
         self.low_observation_space = env_info[1]
         self.high_observation_space = env_info[2]
-        self.Q = TiledQTable(self.low_observation_space, self.high_observation_space, tiling_specs, self.nA)
+        self.Q = TiledQTable(self.low_observation_space, self.high_observation_space, tiling_specs, self.nA, verbose=verbose)
 
         self.alpha = alpha
         self.gamma = gamma
         self.nEpisode = 1
-        self.epsilon = 1.0/self.nEpisode
+        self.epsilon = 1.0
+        self.epsilon_min = 0.05
 
     def choose_action(self, state, greedy=False):
         if greedy or (np.random.random_sample() >= self.epsilon):
@@ -27,4 +28,5 @@ class Agent:
 
         if done:
             self.nEpisode += 1
-            self.epsilon = 1.0/self.nEpisode
+            self.epsilon *= self.gamma
+            self.epsilon = max(self.epsilon, self.epsilon_min)

@@ -24,7 +24,6 @@ def save_log(log_data, log_info):
 
     df.to_csv("results/" + log_info["agent"][0] + "/" + log_info["env"][0] + "/" + log_info["agent"][0] + "_" + str(log_info["seed"][0]) + ".csv")
 
-    print(log_info)
     df_info = pd.DataFrame(log_info)
 
     df_info.to_csv("results/" + log_info["agent"][0] + "/" + log_info["env"][0] + "/" + log_info["agent"][0] + "_" + str(log_info["seed"][0]) + "_info.csv")
