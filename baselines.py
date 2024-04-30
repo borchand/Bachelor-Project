@@ -1,11 +1,10 @@
 import os
 import gymnasium as gym
-
 from huggingface_sb3 import load_from_hub
 from icml_2019_state_abstraction.mac.ActionWrapper import discretizing_wrapper
 from stable_baselines3 import PPO, A2C, DQN, SAC, TD3, DDPG
 from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.callbacks import StopTrainingOnMaxEpisodes
+from stable_baselines3.common.callbacks import StopTrainingOnMaxEpisodes, BaseCallback
 from stable_baselines3.common.utils import set_random_seed
 import pandas as pd
 import numpy as np
@@ -76,6 +75,18 @@ def get_gym_env(env_name, render=False, k=20):
 
     return gym_env
 
+class RewardShapingCallback(BaseCallback):
+    """
+    Callback for logging the reward at each timestep
+    """
+    def __init__(self, verbose=0):
+        
+        super(RewardShapingCallback, self).__init__(verbose)
+        
+    
+    def _on_step(self) -> bool:
+        self.globals['reward']
+        return True
 def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render=False, save=True, train=True):
     """
     Args:

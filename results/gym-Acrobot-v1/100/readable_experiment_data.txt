@@ -4,6 +4,6 @@
 	Q-learning_phi_mac_42,0
 (Params)
 	instances : 1
-	episodes : 5
-	steps : 20
+	episodes : 100
+	steps : 500
 	track_disc_reward : False
