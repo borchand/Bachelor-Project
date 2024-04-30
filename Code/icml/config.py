@@ -28,14 +28,14 @@ LUNAR_LANDER = dict(
 
 ACROBOT = dict(
     max_buffer_size=10000,
-    epsilon=0.3,
+    epsilon=0.6,
     actor_num_h=2,
     actor_h=128,
     actor_lr=0.00025,
     critic_num_h=2,
     critic_h=128,
     critic_lr=0.005,
-    critic_batch_size=32,
+    critic_batch_size=64,
     critic_num_epochs=10,
     critic_target_net_freq=1,
     critic_train_type='model_free_critic_monte_carlo')

@@ -6,6 +6,7 @@ from stable_baselines3 import PPO, A2C, DQN, SAC, TD3, DDPG
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.callbacks import StopTrainingOnMaxEpisodes, BaseCallback, CallbackList, ProgressBarCallback
 from stable_baselines3.common.utils import set_random_seed
+from stable_baselines3.common.logger import configure
 import pandas as pd
 import numpy as np
 import argparse
@@ -82,6 +83,7 @@ class RewardShapingWrapper(gym.Wrapper):
     def __init__(self, env):
         
         super().__init__(env)
+        print("Wrapped in reward shaping wrapper")
         self.reward_shaping = self.get_reward_shaping()
         self.reward_shaping_end = self.get_reward_shaping_end()
     
@@ -102,7 +104,7 @@ class RewardShapingWrapper(gym.Wrapper):
         obs, reward, terminated, truncated, info = self.env.step(action)
         
         if self.reward_shaping is not None:
-            reward = self.reward_shaping(obs)
+            reward += self.reward_shaping(obs)
         
         if (terminated or truncated) and self.reward_shaping_end is not None:
             reward = self.reward_shaping_end(obs, terminated, truncated)
@@ -120,12 +122,22 @@ class RewardShapingWrapper(gym.Wrapper):
         if self.env.unwrapped.spec.id == "MountainCar-v0":
             return self._MountainCar_reward_shaping
         
+        if self.env.unwrapped.spec.id == "MountainCarContinuous-v0":
+            return self._MountainCar_reward_shaping
+        
+        if self.env.unwrapped.spec.id == "Penulum-v1":
+            return self._Pendulum_reward_shaping
+        
         return None
+    
     def get_reward_shaping_end(self):
         
         if self.env.unwrapped.spec.id == "MountainCar-v0":
             return self._MountainCar_reward_shaping_end
         
+        if self.env.unwrapped.spec.id == "MountainCarContinuous-v0":
+            return self._MountainCar_reward_shaping_end
+
         if self.env.unwrapped.spec.id == "CartPole-v1":
             return self._CartPole_reward_shaping_end
         
@@ -134,6 +146,7 @@ class RewardShapingWrapper(gym.Wrapper):
         
         if self.env.unwrapped.spec.id == "Acrobot-v1":
             return self._Acrobot_reward_shaping_end
+        
         return None
 
     def _Acrobot_reward_shaping_end(self, state, terminated, truncated):
@@ -141,6 +154,12 @@ class RewardShapingWrapper(gym.Wrapper):
             return 1000
         return 0
     
+    def _Pendulum_reward_shaping(self, state):
+        x, y, velocity = state
+        if abs(y) < 0.2 and x > 0 and abs(velocity) < 0.2:
+                return 10
+        return 0
+
     def _Pendulum_reward_shaping_end(self, state, terminated, truncated):
         if abs(state[1]) < 0.1 and abs(state[2]) < 0.1:
             return 1000
@@ -159,7 +178,13 @@ class RewardShapingWrapper(gym.Wrapper):
             return -1000
         return 1
     
-    
+def get_logger():
+    """
+    Get the logger
+    """
+    temp_dir = "logs/sb3/"
+    return configure(temp_dir, ["csv"])
+
 def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render=False, save=True, train=True):
     """
     Args:
@@ -183,16 +208,20 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
 
     # create the model
     model = model_class("MlpPolicy", env=env, verbose=1)
+    logger = get_logger()
+    model.set_logger(logger)
     
     if train:
         # callback to stop training after max episodes
-        # callback_progress_bar = ProgressBarCallback()
+        callback_progress_bar = ProgressBarCallback()
         callback_max_episodes = StopTrainingOnMaxEpisodes(max_episodes=episodes, verbose=1)
-        callback_list = CallbackList([callback_max_episodes])
+        callback_list = CallbackList([callback_max_episodes, callback_progress_bar])
         # get max number of steps in a episode
         max_timesteps = env.env._max_episode_steps * episodes
         
         # model learn the env
+        if render:
+            log_interval = 1
         state_time = time.time()
         model.learn(total_timesteps=max_timesteps, log_interval=5, callback=callback_list)
         end_time = time.time()
@@ -212,9 +241,7 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
         env = get_gym_env(env_name, render=True, k=k)
         model = model.load(save_name, env=env)
 
-        model.set_env(env)
         obs, info = env.reset()
-        
         for _ in range(1000):
             action, _states = model.predict(obs, deterministic=True)
             obs, reward, terminated, truncated, info = env.step(action)
