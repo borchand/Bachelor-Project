@@ -98,6 +98,7 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--train', choices=['t', 'f'], default='t', help='Train the model')
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='t', help='Render the model')
     parser.add_argument('-s', '--seed', type=int, default=None, help='Seed for the model. If rendering, provide the seed of the model to render')
+    parser.add_argument('-v', '--verbose', choices=['t', 'f'], default='t', help='Verbose mode')
     # choose the environment to train and render
     parser.add_argument('-e', '--env', default='MountainCar', choices=['MountainCar', 'MountainCarContinuous','CartPole', 'LunarLander', 'Acrobot', 'Pendulum'], help='Choose the environment to train and render')
     args = parser.parse_args()
@@ -122,12 +123,14 @@ if __name__ == "__main__":
 
     env = config['env']
 
+    verbose = args.verbose == 't'
+
     tiling_specs = config['tiling_specs']
 
     if args.train == 't':
         print("Training the model")
-        agent = Agent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=True)
-        trained_agent = run_agent(env, agent, config["episodes"], config['map_name'], args.seed, verbose=True)
+        agent = Agent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=verbose)
+        trained_agent = run_agent(env, agent, config["episodes"], config['map_name'], args.seed, verbose=verbose)
 
     if args.render == 't':
         print("Rendering the model")

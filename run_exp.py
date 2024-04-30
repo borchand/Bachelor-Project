@@ -1,5 +1,6 @@
 import sys
 from tqdm import tqdm
+import argparse
 
 sys.path.append('CATRL/')
 
@@ -23,9 +24,8 @@ sys.path.append('Code/CATRL/')
 from Code.CATRL.config import Acrobot as CATRLAcrobot, CartPole as CATRLCartPole, MountainCar as CATRLMountainCar, MountainCarContinuous as CATRLMountainCarContinuous, LunarLander as CATRLLunarLander, Pendulum as CATRLPendulum
 
 
-def main():
+def main(run_exp_num = 20):
 
-    run_exp_num = 20
     episodes_per_env = [1000, 1000, 500, 500, 2000, 1000] 
     
     # Tile Coding
@@ -70,4 +70,11 @@ def main():
     print("Running Bin Q Learning")
 
 if __name__ == "__main__":
-    main()
+
+    # args
+    parser = argparse.ArgumentParser(description='Run experiments')
+    parser.add_argument('-n', '--num', type=int, default=20, help='Number of experiments to run')
+
+    args = parser.parse_args()
+
+    main(args.num)
