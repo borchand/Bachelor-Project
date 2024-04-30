@@ -69,6 +69,7 @@ def get_gym_env(env_name, render=False, k=20):
     Returns:
         gym_env (gym.Env): Gym environment
     """
+    print("this is the env name", env_name)
     gym_env = gym.make(env_name, render_mode='human') if render else gym.make(env_name)
 
     if isinstance(gym_env.action_space, gym.spaces.Box): 

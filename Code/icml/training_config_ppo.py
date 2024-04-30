@@ -38,7 +38,7 @@ ACROBOT = dict(
     render_experiment=False)
 
 MOUNTAIN_CAR = dict(
-    gym_name='MountainCar',
+    gym_name='MountainCar-v0',
     algo="ppo",
     policy_episodes=500,
     experiment_episodes=200,

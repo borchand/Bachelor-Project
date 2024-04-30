@@ -10,6 +10,7 @@ from icml_2019_state_abstraction.experiments import run_learning_experiment
 import baselines
 import argparse
 import Code.icml.config
+
 def main(
         gym_name: str,
         algo: str,
@@ -24,7 +25,9 @@ def main(
         render_policy=False,
         render_experiment=False,
         save=True,
-        verbose=False):
+        verbose=False,
+        config=None
+        ):
 
     """
     Args:
@@ -45,10 +48,10 @@ def main(
         Run the training of the model and the learning experiment
     """
     
-    continuous_action_envs = ['Pendulum-v1', 'MountainCarContinuous-v0', 'LunarLanderContinuous-v2']
-    if gym_name in continuous_action_envs:
-        assert k_bins > 1, "Action space must be discretized for continuous action environments."
-    assert "-" in gym_name, "Remember to use the correct gym name. with version number."
+    # continuous_action_envs = ['Pendulum-v1', 'MountainCarContinuous-v0', 'LunarLanderContinuous-v2']
+    # if gym_name in continuous_action_envs:
+    #     assert k_bins > 1, "Action space must be discretized for continuous action environments."
+    # assert "-" not in gym_name, f"Remember to use the correct gym name. with version number. {gym_name} is not valid."
     
     if algo == 'mac':
         
@@ -62,7 +65,8 @@ def main(
             seed=seed,
             train=train,
             verbose=verbose,
-            render=render_policy)
+            render=render_policy,
+            config=config)
     
     else:
         if verbose:
@@ -97,19 +101,18 @@ def main(
 
 def main_with_config(config: dict, seed=None, verbose=False):
     
-    gym_name=config['env_name'],
-    algo=config['algo'],
-    policy_episodes=config['policy_episodes'],
-    experiment_episodes=config['experiment_episodes'],
-    k_bins=config['k_bins'],
-    seed=config['seed'],
-    train=config['train'],
-    run_experiment=config['run_experiment'],
-    abstraction=config['abstraction'],
-    load_model=config['load_model'],
-    render_policy=config['render_policy'],
-    render_experiment=config['render_experiment'],
-
+    gym_name = config['gym_name']
+    algo=config['algo']
+    policy_episodes=config['policy_episodes']
+    experiment_episodes=config['experiment_episodes']
+    k_bins=config['k_bins']
+    train=config['train']
+    run_experiment=config['run_experiment']
+    abstraction=config['abstraction']
+    load_model=config['load_model']
+    render_policy=config['render_policy']
+    render_experiment=config['render_experiment']
+    
     main(
         gym_name=gym_name,
         algo=algo,
@@ -122,9 +125,10 @@ def main_with_config(config: dict, seed=None, verbose=False):
         load_model=load_model,
         render_policy=render_policy,
         render_experiment=render_experiment,
-        save=save,
+        save=True,
         seed=seed,
-        verbose=verbose
+        verbose=verbose,
+        config=config
     )
 
 if __name__ == "__main__":
