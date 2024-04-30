@@ -53,7 +53,8 @@ def run_agent(env, agent, nEpisodes, env_name, seed=None, verbose=False):
             action = agent.act(state, reward, done)
 
         if verbose:
-            print("Episode: ", i, "Reward: ", total_reward, "Epsilon: ", agent.epsilon, "epochs: ", epochs, "success: ", success)
+            print ("_______________________________")
+            print ("Episode: " + str(i) + '\t' + "Reward: " + str (total_reward) + '\t' + "Epsilon: " + str(agent.epsilon) + '\t' + "epochs: " + str(epochs) + '\t' + "success: " + str(success))
 
         log_data["episode"].append(i)
         log_data["reward"].append(total_reward)

@@ -56,7 +56,8 @@ def run_agent(env, agent, nEpisodes, env_name, seed=None, verbose=False):
 
             if done:
                 if verbose:
-                    print("Episode: ", i, "Reward: ", ret, "Epsilon: ", agent.epsilon, "epochs: ", epochs, "success: ", success)
+                    print ("_______________________________")
+                    print("Episode: " + str(i) + '\t' + "Reward: " + str(ret) + '\t' + "Epsilon: " + str(agent.epsilon) + '\t' +"epochs: " + str(epochs) + '\t' + "success: " + str(success))
 
                 break
 
