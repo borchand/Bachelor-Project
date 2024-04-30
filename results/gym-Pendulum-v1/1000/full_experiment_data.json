@@ -14,7 +14,7 @@
     "MISC": {
         "instances": 1,
         "episodes": 100,
-        "steps": 200,
+        "steps": 1000,
         "track_disc_reward": false
     },
     "FUNC": "run_agents_on_mdp"
