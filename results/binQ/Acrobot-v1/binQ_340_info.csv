@@ -1,0 +1,2 @@
+,seed,time,agent,env,episodes,epochs,success_rate
+0,340,73.64561629295349,binQ,Acrobot-v1,1000,450594,0.297
