@@ -38,7 +38,7 @@ sys.path.append('Code/icml/')
 from Code.icml.training_config_mac import ACROBOT as IcmlAcrobotMAC, CARTPOLE as IcmlCartPoleMAC, MOUNTAIN_CAR as IcmlMountainCarMAC, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousMAC, LUNAR_LANDER as IcmlLunarLanderMAC, PENDULUM as IcmlPendulumMAC
 from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as IcmlCartPolePPO, MOUNTAIN_CAR as IcmlMountainCarPPO, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousPPO, LUNAR_LANDER as IcmlLunarLanderPPO, PENDULUM as IcmlPendulumPPO
 
-def main(run_exp_num = 20, verbose = False):
+def main(run_exp_num = 20, run_icml = False):
     
     CartPoleEpisodes = 500
     AcrobotEpisodes = 1000
@@ -54,34 +54,37 @@ def main(run_exp_num = 20, verbose = False):
     # create seeds
     # seeds = random.sample(range(1000), run_exp_num)
     seeds = [14, 157, 340, 441, 595]
-    # CATRL
-    congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
+
+
     
 
+    if run_icml:
+        print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
+        ppo_configs = [ IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
+        for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
 
-    print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
-    ppo_configs = [ IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
-    for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
+            print("Running ", ppo_config['gym_name'])
 
-        print("Running ", ppo_config['gym_name'])
+            ppo_config['episode_max'] = episodes
+            for i in tqdm(range(run_exp_num)):
+                run_icml(ppo_config, seed=seeds[i], verbose=False)
 
-        ppo_config['episode_max'] = episodes
-        for i in tqdm(range(run_exp_num)):
-            run_icml(ppo_config, seed=seeds[i], verbose=False)
+        
+        print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
+        mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlPendulumMAC]
+        for mac_config, episodes in zip(mac_configs, episodes_per_env):
 
-    
-    print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
-    mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlPendulumMAC]
-    for mac_config, episodes in zip(mac_configs, episodes_per_env):
+            print("Running ", mac_config['gym_name'])
 
-        print("Running ", mac_config['gym_name'])
-
-        mac_config['episode_max'] = episodes
-        for i in tqdm(range(run_exp_num)):
-            run_icml(mac_config, seed=seeds[i], verbose=False)
+            mac_config['episode_max'] = episodes
+            for i in tqdm(range(run_exp_num)):
+                run_icml(mac_config, seed=seeds[i], verbose=False)
 
 
     print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
+    
+    # CATRL
+    congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
 
     for config, episodes in zip(congifs, episodes_per_env):
 
@@ -135,8 +138,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run experiments')
     
     parser.add_argument('-n', '--num', type=int, default=20, help='Number of experiments to run')
-    parser.add_argument('-v', '--verbose', default='f', choices=['f', 't'], help='Verbose mode to display messages')
+    parser.add_argument('-icml', '--icml', default='f', choices=['f', 't'], help='Run ICML experiments')
 
     args = parser.parse_args()
 
-    main(args.num, args.verbose == 't')
+    main(args.num, args.verbose == 't', args.icml == 't')
