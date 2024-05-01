@@ -1,0 +1,2 @@
+,seed,time,agent,env,episodes,epochs,success_rate
+0,421,234.30164909362793,TileCoding,Acrobot-v1,1000,271930,0.795

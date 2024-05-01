@@ -29,7 +29,7 @@ class AcrobotEnv(BaseEnv):
         if terminated:
             done = True
             success = True
-            reward = 1000
+            reward = 1000   
 
             
         return self.scale_state(new_state.tolist()), reward, done, success

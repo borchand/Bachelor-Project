@@ -1,0 +1,2 @@
+,agent,episodes,total_steps,success_rate,training_time,seed
+0,icml_500_mac,500,94649,0.02,658.4257553901673,42

@@ -1,7 +1,7 @@
 import os
 import pickle
 import pandas as pd
-
+import gzip
 
 def save_log(log_data, log_info):
     """
@@ -48,7 +48,8 @@ def save_model(agent, log_info):
     file_name = log_info["agent"][0] + "/" + log_info["env"][0] + "/" + log_info["agent"][0] + "_" + str(log_info["seed"][0])
 
     # save the agent and abstraction
-    pickle.dump(agent, open("models/" + file_name + "_agent.pkl", "wb"))
+    with gzip.open("models/" + file_name + "_agent.pkl", "wb") as f:
+        pickle.dump(agent, f)
 
 def save_abstraction(abstraction, log_info):
     """
@@ -70,17 +71,18 @@ def save_abstraction(abstraction, log_info):
     file_name = log_info["agent"][0] + "/" + log_info["env"][0] + "/" + log_info["agent"][0] + "_" + str(log_info["seed"][0])
 
     # save the agent and abstraction
-    pickle.dump(abstraction, open("models/" + file_name + "_abs.pkl", "wb"))
+    with gzip.open("models/" + file_name + "_agent.pkl", "wb") as f:
+        pickle.dump(abstraction, f)
 
 def load_model(agent_name, env, seed):
     """
     Load the agent
     """
-
     file_name = agent_name + "/" + env + "/" + agent_name + "_" + str(seed)
 
     # load the agent and abstraction
-    agent = pickle.load(open("models/" + file_name + "_agent.pkl", "rb"))
+    with gzip.open("models/" + file_name + "_agent.pkl", "rb") as f:
+        agent = pickle.load(f)
     return agent
 
 def load_abstraction(agent_name, env, seed):
@@ -90,5 +92,6 @@ def load_abstraction(agent_name, env, seed):
     file_name = agent_name + "/" + env + "/" + agent_name + "_" + str(seed)
 
     # load the agent and abstraction
-    abstraction = pickle.load(open("models/" + file_name + "_abs.pkl", "rb"))
+    with gzip.open("models/" + file_name + "_abs.pkl", "rb") as f:
+            abstraction = pickle.load(f)
     return abstraction
