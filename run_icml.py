@@ -9,7 +9,7 @@ import icml_2019_state_abstraction.experiments.run_learning_experiment as run_le
 from icml_2019_state_abstraction.experiments import run_learning_experiment
 import baselines
 import argparse
-import Code.icml.config
+import Code.icml.utils as utils
 
 def main(
         gym_name: str,
@@ -54,6 +54,11 @@ def main(
     #     assert k_bins > 1, "Action space must be discretized for continuous action environments."
     # assert "-" not in gym_name, f"Remember to use the correct gym name. with version number. {gym_name} is not valid."
     
+    if config is None:
+        config = utils.get_config(env_name=gym_name, algo=algo)
+        config["train"] = train
+        config["policy_episodes"] = policy_episodes
+        config["k_bins"] = k_bins
     if algo == 'mac':
         
         if verbose:

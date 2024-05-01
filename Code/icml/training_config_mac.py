@@ -36,6 +36,7 @@ LUNAR_LANDER = dict(
     load_model=True,
     render_policy=False,
     render_experiment=False,
+    # Abstraction network
     max_buffer_size=10000,
     epsilon=0.3,
     actor_num_h=2,
@@ -133,7 +134,7 @@ MOUNTAIN_CAR_CONTINUOUS = dict(
     algo="mac",
     policy_episodes=2000,
     experiment_episodes=200,
-    k_bins=20,
+    k_bins=4,
     train=False,
     run_experiment=True,
     abstraction=True,
