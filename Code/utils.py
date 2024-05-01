@@ -92,5 +92,6 @@ def load_abstraction(agent_name, env, seed):
     file_name = agent_name + "/" + env + "/" + agent_name + "_" + str(seed)
 
     # load the agent and abstraction
-    abstraction = pickle.load(open("models/" + file_name + "_abs.pkl", "rb"))
+    with gzip.open("models/" + file_name + "_abs.pkl", "rb") as f:
+            abstraction = pickle.load(f)
     return abstraction

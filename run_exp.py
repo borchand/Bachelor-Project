@@ -41,7 +41,7 @@ from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as
 def main(run_exp_num = 20, verbose = False):
     
     CartPoleEpisodes = 500
-    AcrobotEpisodes = 10
+    AcrobotEpisodes = 1000
     
     MountainCarEpisodes = 1400
     MountainCarContinuousEpisodes = 600
