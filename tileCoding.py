@@ -4,6 +4,7 @@ import gymnasium as gym
 import argparse
 import random
 import time
+import gzip
 
 sys.path.append('Code/TileCoding/')
 sys.path.append('Code/envs/')
