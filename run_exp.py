@@ -17,7 +17,7 @@ sys.path.append('CATRL/')
 from tileCoding import run_agent as run_tileCoding
 from binQLearning import run_agent as run_binQ
 from run_CATRL import main as run_CATRL
-from run_icml import main_with_config as run_icml
+# from run_icml import main_with_config as run_icml
 
 sys.path.append('Code/TileCoding/')
 sys.path.append('Code/envs/')
@@ -34,9 +34,9 @@ sys.path.append('Code/CATRL/')
 
 from Code.CATRL.config import Acrobot as CATRLAcrobot, CartPole as CATRLCartPole, MountainCar as CATRLMountainCar, MountainCarContinuous as CATRLMountainCarContinuous, LunarLander as CATRLLunarLander, Pendulum as CATRLPendulum
 
-sys.path.append('Code/icml/')
-from Code.icml.training_config_mac import ACROBOT as IcmlAcrobotMAC, CARTPOLE as IcmlCartPoleMAC, MOUNTAIN_CAR as IcmlMountainCarMAC, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousMAC, LUNAR_LANDER as IcmlLunarLanderMAC, PENDULUM as IcmlPendulumMAC
-from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as IcmlCartPolePPO, MOUNTAIN_CAR as IcmlMountainCarPPO, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousPPO, LUNAR_LANDER as IcmlLunarLanderPPO, PENDULUM as IcmlPendulumPPO
+# sys.path.append('Code/icml/')
+# from Code.icml.training_config_mac import ACROBOT as IcmlAcrobotMAC, CARTPOLE as IcmlCartPoleMAC, MOUNTAIN_CAR as IcmlMountainCarMAC, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousMAC, LUNAR_LANDER as IcmlLunarLanderMAC, PENDULUM as IcmlPendulumMAC
+# from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as IcmlCartPolePPO, MOUNTAIN_CAR as IcmlMountainCarPPO, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousPPO, LUNAR_LANDER as IcmlLunarLanderPPO, PENDULUM as IcmlPendulumPPO
 
 def main(run_exp_num = 20, run_icml = False):
     
@@ -59,26 +59,27 @@ def main(run_exp_num = 20, run_icml = False):
     
 
     if run_icml:
-        print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
-        ppo_configs = [ IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
-        for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
+        pass
+        # print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
+        # ppo_configs = [ IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
+        # for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
 
-            print("Running ", ppo_config['gym_name'])
+        #     print("Running ", ppo_config['gym_name'])
 
-            ppo_config['episode_max'] = episodes
-            for i in tqdm(range(run_exp_num)):
-                run_icml(ppo_config, seed=seeds[i], verbose=False)
+        #     ppo_config['episode_max'] = episodes
+        #     for i in tqdm(range(run_exp_num)):
+        #         run_icml(ppo_config, seed=seeds[i], verbose=False)
 
         
-        print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
-        mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlPendulumMAC]
-        for mac_config, episodes in zip(mac_configs, episodes_per_env):
+        # print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
+        # mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlPendulumMAC]
+        # for mac_config, episodes in zip(mac_configs, episodes_per_env):
 
-            print("Running ", mac_config['gym_name'])
+        #     print("Running ", mac_config['gym_name'])
 
-            mac_config['episode_max'] = episodes
-            for i in tqdm(range(run_exp_num)):
-                run_icml(mac_config, seed=seeds[i], verbose=False)
+        #     mac_config['episode_max'] = episodes
+        #     for i in tqdm(range(run_exp_num)):
+        #         run_icml(mac_config, seed=seeds[i], verbose=False)
 
 
     print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
@@ -142,4 +143,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    main(args.num, args.verbose == 't', args.icml == 't')
+    main(args.num, args.icml == 't')
