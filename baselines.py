@@ -186,6 +186,18 @@ def get_logger():
     temp_dir = "logs/sb3/"
     return configure(temp_dir, ["csv"])
 
+def from_config(config: dict, seed=None, verbose=False, time_limit_sec=None):
+    
+    main(
+        env_name=config['env_name'],
+        algo_name=config['algo'],
+        episodes=config['episodes'],
+        k=config['k_bins'],
+        render=config['render_policy'],
+        save=config['save'],
+        train=config['train'],
+        seed=seed)
+
 def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render=False, save=True, train=True):
     """
     Args:

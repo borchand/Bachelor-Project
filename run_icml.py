@@ -18,6 +18,7 @@ def main(
         experiment_episodes: int,
         k_bins: int,
         seed: int,
+        time_limit_sec=None,
         train=True,
         run_experiment=True,
         abstraction=True,
@@ -58,15 +59,11 @@ def main(
         if verbose:
             print("running training of algorithm: ", algo, "in environment: ", gym_name)
         
-        run.main(
-            env_name=gym_name,
-            episodes=policy_episodes,
-            k_bins=k_bins,
+        run.main_from_config(
+            config=config,
             seed=seed,
-            train=train,
             verbose=verbose,
-            render=render_policy,
-            config=config)
+            time_limit_sec=time_limit_sec)
     
     else:
         if verbose:
