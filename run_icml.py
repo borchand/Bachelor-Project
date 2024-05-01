@@ -11,6 +11,62 @@ import baselines
 import argparse
 import Code.icml.utils as utils
 
+def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None):
+
+    algo = config["algo"]
+    gym_name = config["gym_name"]
+    config["env_name"] = gym_name
+    policy_episodes = config["policy_episodes"]
+    experiment_episodes = config["experiment_episodes"]
+    k_bins = config["k_bins"]
+    train = config["train"]
+    run_experiment = config["run_experiment"]
+    abstraction = config["abstraction"]
+    load_model = config["load_model"]
+    render_policy = config["render_policy"]
+    render_experiment = config["render_experiment"]
+    debug = config["debug"]
+
+    if config["algo"] == 'mac':
+        
+        if verbose:
+            print("running training of algorithm: ", algo, "in environment: ", gym_name)
+        
+        run.main_from_config(
+            config=config,
+            seed=seed,
+            verbose=verbose,
+            time_limit_sec=time_limit_sec)
+    
+    else:
+        if verbose:
+            print("Running training of algorithm: ", algo, "in environment: ", gym_name, "for ", policy_episodes, "episodes.")
+        
+        baselines.from_config(
+            config=config,
+            seed=seed,
+            verbose=verbose,
+            time_limit_sec=time_limit_sec)
+        
+        if verbose:
+            print("Training complete.")
+         
+    ## run learning experiment
+    if config["run_experiment"] or config["abstraction"] or config["load_model"]:
+        
+        run_learning_experiment.main(
+            env_name=gym_name,
+            algo=algo,
+            k_bins=k_bins,
+            seed=seed,
+            abstraction=abstraction,
+            load_model=load_model,
+            policy_train_episodes=policy_episodes,
+            render=render_experiment,
+            experiment_episodes=experiment_episodes,
+            run_expiriment=run_experiment,
+            verbose=verbose,
+            debug=debug)
 def main(
         gym_name: str,
         algo: str,
