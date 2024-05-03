@@ -2,7 +2,7 @@ import sys
 sys.path.append('Code/envs/')
 sys.path.append('Code/')
 CARTPOLE = dict(
-    max_buffer_size=10000,
+    max_buffer_size=5000,
     epsilon=0.3,
     actor_num_h=1,
     actor_h=64,
