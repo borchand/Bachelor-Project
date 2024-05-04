@@ -29,6 +29,17 @@ This repository contains the following environments:
 - `MountainCarContinuous-v0`
 - `Pendulum-v1`
 
+## Icml State abstraction 
+To run the code, this will train a ppo policy with 1000 episodes and then run the experiments
+```
+python run_icml.py -a ppo -e Acrobot-v1 -pep 1000
+```
+
+To run a pre trained policy, you have to specify the seed 
+```
+python run_icml.py -a ppo -e Acroot-v1 -pep 1000 --seed 42 -tr f 
+```
+This has training false and will load a policy that have trained for 1000 episodes with the seed 42
 
 ## CAT_RL
 about...
