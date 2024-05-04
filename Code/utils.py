@@ -34,7 +34,7 @@ def save_model(agent, log_info):
     """
 
     # create folder models if it does not exist
-    if not os.path.exists("models/"):
+    if not os.path.exists("models/"):   
         os.makedirs("models/")
 
     # create folder models/agent if it does not exist

@@ -1,6 +1,5 @@
 import os
 import gymnasium as gym
-from huggingface_sb3 import load_from_hub
 from icml_2019_state_abstraction.mac.ActionWrapper import discretizing_wrapper
 from stable_baselines3 import PPO, A2C, DQN, SAC, TD3, DDPG
 from stable_baselines3.common.evaluation import evaluate_policy
