@@ -11,13 +11,21 @@ import baselines
 import argparse
 import Code.icml.utils as utils
 
+def split_max_episodes(max_episodes: int):
+    """
+    Split the maximum number of episodes into training and experiment episodes
+    """
+    policy_episodes = int(max_episodes * 0.8)
+    experiment_episodes = max_episodes - policy_episodes
+    
+    return policy_episodes, experiment_episodes
+
 def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None):
 
     algo = config["algo"]
     gym_name = config["gym_name"]
     config["env_name"] = gym_name
-    policy_episodes = config["policy_episodes"]
-    experiment_episodes = config["experiment_episodes"]
+    policy_episodes, experiment_episodes = split_max_episodes(config["max_episodes"])
     k_bins = config["k_bins"]
     train = config["train"]
     run_experiment = config["run_experiment"]
