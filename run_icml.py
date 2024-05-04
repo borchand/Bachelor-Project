@@ -25,7 +25,7 @@ def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None
     load_model = config["load_model"]
     render_policy = config["render_policy"]
     render_experiment = config["render_experiment"]
-    debug = config["debug"]
+    debug = config['debug']
 
     if config["algo"] == 'mac':
         
@@ -83,6 +83,7 @@ def main(
         render_experiment=False,
         save=True,
         verbose=False,
+        debug=False,
         config=None
         ):
 
@@ -115,6 +116,7 @@ def main(
         config["train"] = train
         config["policy_episodes"] = policy_episodes
         config["k_bins"] = k_bins
+        config['debug'] = debug
     if algo == 'mac':
         
         if verbose:
@@ -209,7 +211,8 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     parser.add_argument('-sh', '--show', choices=['t', 'f'], default='f', help='Show the model')
     parser.add_argument('-v', '--verbose', choices=['t', 'f'], default='t', help='Verbose output')
-    
+    parser.add_argument('-d', '--debug', choices=['t', 'f'], default='f', help='debug output')
+
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='t', help='Render the model')
     parser.add_argument('-rp', '--render-policy', choices=['t', 'f'], default=None, help='Render the policy')
     parser.add_argument('-re', '--render-experiment', choices=['t', 'f'], default=None, help='Render the policy')

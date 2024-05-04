@@ -38,7 +38,7 @@ def _get_model_class(algo_name):
         return DDPG
     else:
         raise ValueError('Invalid algorithm name')
-def get_save_name(env_name, algo_name, episodes, k=None):
+def get_save_name(env_name: str, algo_name: str, episodes: int, seed: int , k=None, verbose: bool = False):
     """
     Args:
         :param algo_name (str): Name of the algorithm
@@ -55,11 +55,12 @@ def get_save_name(env_name, algo_name, episodes, k=None):
     if k > 1 and env_name in continuous_action_envs:
         save_name += str(k) + "_"
     
-    save_name += algo_name + "_" + env_name
-    print("this is the save name", save_name)
+    save_name += algo_name + "_" + env_name + "_" + str(seed)
+    if verbose:
+        print("this is the save name", save_name)
     return save_name
 
-def get_gym_env(env_name, render=False, k=20):
+def get_gym_env(env_name, render=False, k=1):
     """
     Args:
         :param env_name (str): Name of the environment
@@ -197,9 +198,10 @@ def from_config(config: dict, seed=None, verbose=False, time_limit_sec=None):
         save=config['save'],
         train=config['train'],
         debug=config['debug'],
+        verbose=verbose,
         seed=seed)
 
-def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render=False, save=True, train=True, debug=False):
+def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render=False, save=True, train=True, verbose=False, debug=False):
     """
     Args:
         :param env_name (str): Name of the environment
@@ -215,7 +217,14 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
 
 
     env = get_gym_env(env_name, render=False, k=k)
-    save_name = get_save_name(env_name, algo_name, episodes, k=k)
+    save_name = get_save_name(
+        env_name=env_name,
+        algo_name=algo_name,
+        episodes=episodes,
+        seed=seed,
+        verbose=verbose,
+        k=k)
+    
     env = RewardShapingWrapper(env)
     ## set random seed
     random.seed(seed)
