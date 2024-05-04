@@ -59,7 +59,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     if run_icml_code:
         print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
         ppo_configs = [ IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
-        for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
+        for ppo_config, episodes in zip(ppo_configs[1:], episodes_per_env[1:]):
 
             #     print("Running ", ppo_config['gym_name'])
 
