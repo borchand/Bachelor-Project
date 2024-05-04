@@ -38,16 +38,16 @@ sys.path.append('Code/icml/')
 from Code.icml.training_config_mac import ACROBOT as IcmlAcrobotMAC, CARTPOLE as IcmlCartPoleMAC, MOUNTAIN_CAR as IcmlMountainCarMAC, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousMAC, LUNAR_LANDER as IcmlLunarLanderMAC, PENDULUM as IcmlPendulumMAC
 from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as IcmlCartPolePPO, MOUNTAIN_CAR as IcmlMountainCarPPO, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousPPO, LUNAR_LANDER as IcmlLunarLanderPPO, PENDULUM as IcmlPendulumPPO
 
-def main(run_exp_num = 20, run_icml_code = False, run_rest = True):
+def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
-    CartPoleEpisodes = 1
-    AcrobotEpisodes = 1
+    CartPoleEpisodes = 6000
+    AcrobotEpisodes = 2000
     
-    MountainCarEpisodes = 1
-    MountainCarContinuousEpisodes = 1
+    MountainCarEpisodes = 5000
+    MountainCarContinuousEpisodes = 1000
     
-    LunarLanderEpisodes = 1
-    PendulumEpisodes = 1
+    LunarLanderEpisodes = 6000
+    PendulumEpisodes = 6000
 
     episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
 
