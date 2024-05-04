@@ -38,7 +38,7 @@ sys.path.append('Code/icml/')
 from Code.icml.training_config_mac import ACROBOT as IcmlAcrobotMAC, CARTPOLE as IcmlCartPoleMAC, MOUNTAIN_CAR as IcmlMountainCarMAC, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousMAC, LUNAR_LANDER as IcmlLunarLanderMAC, PENDULUM as IcmlPendulumMAC
 from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as IcmlCartPolePPO, MOUNTAIN_CAR as IcmlMountainCarPPO, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousPPO, LUNAR_LANDER as IcmlLunarLanderPPO, PENDULUM as IcmlPendulumPPO
 
-def main(run_exp_num = 20, run_icml_code = False):
+def main(run_exp_num = 20, run_icml_code = False, run_rest = True):
     
     CartPoleEpisodes = 1
     AcrobotEpisodes = 1
@@ -52,82 +52,77 @@ def main(run_exp_num = 20, run_icml_code = False):
     episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
 
     # create seeds
-    # seeds = random.sample(range(1000), run_exp_num)
-    seeds = [14, 157, 340, 441, 595]
-    # CATRL
-    congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
-    
-
-    print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
-    ppo_configs = [ IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
-    for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
-
-        #     print("Running ", ppo_config['gym_name'])
-
-        ppo_config['episode_max'] = episodes
-        ppo_config['debug'] = False
-        for i in tqdm(range(run_exp_num)):
-            run_icml(ppo_config, seed=seeds[i], verbose=False)
-
-    print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
-    mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlPendulumMAC]
-    for mac_config, episodes in zip(mac_configs, episodes_per_env):
-
-        print("Running ", mac_config['gym_name'])
-        mac_config['debug'] = False
-        mac_config['episode_max'] = episodes
-        for i in tqdm(range(run_exp_num)):
-            run_icml(mac_config, seed=seeds[i], verbose=False)
-    print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
-    
-    # CATRL
-    congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
-
-    for config, episodes in zip(congifs, episodes_per_env):
-
-        print("Running ", config['map_name'])
-
-        env = config['env']
-        config['episode_max'] = episodes
-        for i in tqdm(range(run_exp_num)):
-            run_CATRL(config, seed=seeds[i], verbose=False)
-
-    # Bin Q Learning
-    congifs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum]
-
-
-    print('\n' + '{:_^40}'.format("Running bins") + '\n')
-
-    for config, episodes in zip(congifs, episodes_per_env):
-        print("Running ", config['map_name'])
-
-        env = config['env']
-
-        for i in tqdm(range(run_exp_num)):
-            agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], seed=seeds[i], verbose=False)
-
-            run_binQ(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
-
+    seeds = random.sample(range(1000), run_exp_num)
+    # seeds = [14, 157, 340, 441, 595]
 
     
-    
-    # Tile Coding
-    congifs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum]
+    if run_icml_code:
+        print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
+        ppo_configs = [ IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
+        for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
 
-    print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
-    for config, episodes in zip(congifs, episodes_per_env):
-        print("Running ", config['name'])
+            #     print("Running ", ppo_config['gym_name'])
 
-        env = config['env']
-        tiling_specs = config['tiling_specs']
+            ppo_config['episode_max'] = episodes
+            ppo_config['debug'] = False
+            for i in tqdm(range(run_exp_num)):
+                run_icml(ppo_config, seed=seeds[i], verbose=False)
 
-        for i in tqdm(range(run_exp_num)):
-            agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
-            run_tileCoding(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
+        print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
+        mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlPendulumMAC]
+        for mac_config, episodes in zip(mac_configs, episodes_per_env):
+
+            print("Running ", mac_config['gym_name'])
+            mac_config['debug'] = False
+            mac_config['episode_max'] = episodes
+            for i in tqdm(range(run_exp_num)):
+                run_icml(mac_config, seed=seeds[i], verbose=False)
+        print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
 
 
-   
+    if run_rest:
+        # CATRL
+        congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
 
+        for config, episodes in zip(congifs, episodes_per_env):
+
+            print("Running ", config['map_name'])
+
+            env = config['env']
+            config['episode_max'] = episodes
+            for i in tqdm(range(run_exp_num)):
+                run_CATRL(config, seed=seeds[i], verbose=False)
+
+        # Bin Q Learning
+        congifs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum]
+
+
+        print('\n' + '{:_^40}'.format("Running bins") + '\n')
+
+        for config, episodes in zip(congifs, episodes_per_env):
+            print("Running ", config['map_name'])
+
+            env = config['env']
+
+            for i in tqdm(range(run_exp_num)):
+                agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], seed=seeds[i], verbose=False)
+
+                run_binQ(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
+
+        
+        # Tile Coding
+        congifs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum]
+
+        print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
+        for config, episodes in zip(congifs, episodes_per_env):
+            print("Running ", config['name'])
+
+            env = config['env']
+            tiling_specs = config['tiling_specs']
+
+            for i in tqdm(range(run_exp_num)):
+                agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
+                run_tileCoding(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
     
 if __name__ == "__main__":
 
@@ -136,7 +131,8 @@ if __name__ == "__main__":
     
     parser.add_argument('-n', '--num', type=int, default=20, help='Number of experiments to run')
     parser.add_argument('-icml', '--icml', default='f', choices=['f', 't'], help='Run ICML experiments')
+    parser.add_argument('-r', '--rest', type=int, default='t', choices=['f', 't'], help='Run rest of the experiments')
 
     args = parser.parse_args()
 
-    main(args.num, args.icml == 't')
+    main(args.num, args.icml == 't', args.rest == 't')
