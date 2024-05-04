@@ -131,7 +131,7 @@ if __name__ == "__main__":
     
     parser.add_argument('-n', '--num', type=int, default=20, help='Number of experiments to run')
     parser.add_argument('-icml', '--icml', default='f', choices=['f', 't'], help='Run ICML experiments')
-    parser.add_argument('-r', '--rest', type=int, default='t', choices=['f', 't'], help='Run rest of the experiments')
+    parser.add_argument('-r', '--rest', default='t', choices=['f', 't'], help='Run rest of the experiments')
 
     args = parser.parse_args()
 
