@@ -25,7 +25,7 @@ def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None
     algo = config["algo"]
     gym_name = config["gym_name"]
     config["env_name"] = gym_name
-    policy_episodes, experiment_episodes = split_max_episodes(config["max_episodes"])
+    policy_episodes, experiment_episodes = split_max_episodes(config["episode_max"])
     k_bins = config["k_bins"]
     train = config["train"]
     run_experiment = config["run_experiment"]
