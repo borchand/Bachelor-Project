@@ -67,6 +67,7 @@ def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None
             run_expiriment=run_experiment,
             verbose=verbose,
             debug=debug)
+
 def main(
         gym_name: str,
         algo: str,
@@ -79,6 +80,7 @@ def main(
         run_experiment=True,
         abstraction=True,
         load_model=False,
+        load_experiment=False,
         render_policy=False,
         render_experiment=False,
         save=True,
@@ -157,6 +159,8 @@ def main(
             render=render_experiment,
             experiment_episodes=experiment_episodes,
             run_expiriment=run_experiment,
+            load_experiment=load_experiment,
+            debug=debug,
             verbose=verbose)
 
 def main_with_config(config: dict, seed=None, verbose=False):
@@ -208,6 +212,8 @@ if __name__ == "__main__":
     parser.add_argument('-ab', '--abstraction', choices=['t', 'f'], default='t', help='Use state abstraction')
 
     parser.add_argument('-l', '--load', choices=['t', 'f'], default='f', help='Load a pre-trained model')
+    parser.add_argument('-le', '--load-experiment', choices=['t', 'f'], default='f', help='Load the experiment')
+
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     parser.add_argument('-sh', '--show', choices=['t', 'f'], default='f', help='Show the model')
     parser.add_argument('-v', '--verbose', choices=['t', 'f'], default='t', help='Verbose output')
@@ -230,9 +236,11 @@ if __name__ == "__main__":
         seed=args.seed,
         train=args.train == 't',
         load_model=args.load == 't',
+        load_experiment=args.load_experiment == 't',
         render_policy=render_policy == 't',
         render_experiment=render_experiment == 't',
         save=args.save == 't',
         run_experiment=args.experiment == 't',
         k_bins=args.k_bins,
+        debug=args.debug == 't',
         verbose=args.verbose == 't')
