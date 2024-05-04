@@ -76,7 +76,7 @@ Acrobot = dict(
     map_name = "Acrobot-v1",
     env = AcrobotEnv(step_max=500),
     renderEnv = AcrobotEnv(step_max=500, render=True),
-    episodes = 1000,
+    episodes = 2000,
     gamma = 0.99,
     alpha = 0.1,
     epsilon = 1.0,
