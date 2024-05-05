@@ -60,8 +60,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
 
     # create seeds
-    seeds = random.sample(range(1000), run_exp_num)
-    # seeds = [14, 157, 340, 441, 595]
+    # seeds = random.sample(range(1000), run_exp_num)
+    seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
 
     
     if run_icml_code:
@@ -91,7 +91,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
         # CATRL
         print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
         
-        congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
+        # congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
+        configs = [CATRLLunarLander]
 
         print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
@@ -105,7 +106,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
                 run_CATRL(config, seed=seeds[i], verbose=False)
 
         # Bin Q Learning
-        congifs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum]
+        # congifs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum]
+        congifs = [BinLunarLander]
 
 
         print('\n' + '{:_^40}'.format("Running bins") + '\n')
@@ -122,7 +124,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
         
         # Tile Coding
-        congifs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum]
+        # congifs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum]
+        congifs = [TileLunarLander]
 
         print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
         for config, episodes in zip(congifs, episodes_per_env):
