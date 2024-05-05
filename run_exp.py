@@ -93,6 +93,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
         
         congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
 
+        print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
+
         for config, episodes in zip(congifs, episodes_per_env):
 
             print("Running ", config['map_name'])
