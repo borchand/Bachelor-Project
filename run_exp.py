@@ -54,30 +54,24 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     MountainCarEpisodes = 3000
     MountainCarContinuousEpisodes = 1000
     
-    LunarLanderEpisodes = 6000
+    LunarLanderEpisodes = 3000
     PendulumEpisodes = 3000
 
-    # episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
-    episodes_per_env = [LunarLanderEpisodes]
-
+    episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
+    # episodes_per_env = [LunarLanderEpisodes]
     # create seeds
     # seeds = random.sample(range(1000), run_exp_num)
-    seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
+    
+    # Seeds for ICML
+    seeds = [237, 379, 482, 672, 886]
+    # Seeds for TC CATRL and BinQ
+    # seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
 
     
     if run_icml_code:
-        print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
-        ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
-        for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
 
-            #     print("Running ", ppo_config['gym_name'])
-
-            ppo_config['episode_max'] = episodes
-            ppo_config['debug'] = False
-            for i in tqdm(range(run_exp_num)):
-                run_icml(ppo_config, seed=seeds[i], verbose=False)
         print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
-        mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlPendulumMAC]
+        mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlLunarLanderMAC, IcmlPendulumMAC]
         for mac_config, episodes in zip(mac_configs, episodes_per_env):
 
             print("Running ", mac_config['gym_name'])
@@ -86,6 +80,16 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
             for i in tqdm(range(run_exp_num)):
                 run_icml(mac_config, seed=seeds[i], verbose=False)
 
+        print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
+        ppo_configs = [IcmlLunarLanderPPO]
+        for ppo_config, episodes in zip(ppo_configs, [LunarLanderEpisodes]):
+
+            #     print("Running ", ppo_config['gym_name'])
+
+            ppo_config['episode_max'] = episodes
+            ppo_config['debug'] = False
+            for i in tqdm(range(run_exp_num)):
+                run_icml(ppo_config, seed=seeds[i], verbose=False)
 
 
     if run_rest:
