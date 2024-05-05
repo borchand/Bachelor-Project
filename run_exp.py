@@ -38,6 +38,9 @@ sys.path.append('Code/icml/')
 from Code.icml.training_config_mac import ACROBOT as IcmlAcrobotMAC, CARTPOLE as IcmlCartPoleMAC, MOUNTAIN_CAR as IcmlMountainCarMAC, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousMAC, LUNAR_LANDER as IcmlLunarLanderMAC, PENDULUM as IcmlPendulumMAC
 from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as IcmlCartPolePPO, MOUNTAIN_CAR as IcmlMountainCarPPO, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousPPO, LUNAR_LANDER as IcmlLunarLanderPPO, PENDULUM as IcmlPendulumPPO
 
+import torch
+print("Cuda available: ", torch.cuda.is_available())
+
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
     CartPoleEpisodes = 6000
@@ -67,7 +70,6 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
             ppo_config['debug'] = False
             for i in tqdm(range(run_exp_num)):
                 run_icml(ppo_config, seed=seeds[i], verbose=False)
-
         print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
         mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlPendulumMAC]
         for mac_config, episodes in zip(mac_configs, episodes_per_env):
@@ -77,11 +79,13 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
             mac_config['episode_max'] = episodes
             for i in tqdm(range(run_exp_num)):
                 run_icml(mac_config, seed=seeds[i], verbose=False)
-        print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
+
 
 
     if run_rest:
         # CATRL
+        print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
+        
         congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
 
         for config, episodes in zip(congifs, episodes_per_env):
