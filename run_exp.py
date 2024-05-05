@@ -43,6 +43,7 @@ import torch
 print("Cuda available: ", torch.cuda.is_available())
 print("Cuda device count: ", torch.cuda.device_count())
 print("Cuda Current device: ", torch.cuda.get_device_name(0))
+print("Threads: ", torch.get_num_threads())
 print("stable-baselines3 device:", get_device(device='auto'))
 
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
