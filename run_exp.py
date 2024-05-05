@@ -48,14 +48,14 @@ print("stable-baselines3 device:", get_device(device='auto'))
 
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
-    CartPoleEpisodes = 6000
+    CartPoleEpisodes = 1000
     AcrobotEpisodes = 2000
     
-    MountainCarEpisodes = 5000
+    MountainCarEpisodes = 3000
     MountainCarContinuousEpisodes = 1000
     
-    LunarLanderEpisodes = 6000
-    PendulumEpisodes = 6000
+    LunarLanderEpisodes = 3000
+    PendulumEpisodes = 3000
 
     episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
 
