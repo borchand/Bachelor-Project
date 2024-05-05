@@ -18,6 +18,7 @@ from tileCoding import run_agent as run_tileCoding
 from binQLearning import run_agent as run_binQ
 from run_CATRL import main as run_CATRL
 from run_icml import icml_from_config as run_icml
+from stable_baselines3.common.utils import get_device
 
 sys.path.append('Code/TileCoding/')
 sys.path.append('Code/envs/')
@@ -40,6 +41,9 @@ from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as
 
 import torch
 print("Cuda available: ", torch.cuda.is_available())
+print("Cuda device count: ", torch.cuda.device_count())
+print("Cuda Current device: ", torch.cuda.get_device_name(0))
+print("stable-baselines3 device:", get_device(device='auto'))
 
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
