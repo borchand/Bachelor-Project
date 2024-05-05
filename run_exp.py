@@ -91,12 +91,12 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
         # CATRL
         print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
         
-        # congifs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
+        # configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
         configs = [CATRLLunarLander]
 
         print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
-        for config, episodes in zip(congifs, episodes_per_env):
+        for config, episodes in zip(configs, episodes_per_env):
 
             print("Running ", config['map_name'])
 
@@ -106,13 +106,13 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
                 run_CATRL(config, seed=seeds[i], verbose=False)
 
         # Bin Q Learning
-        # congifs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum]
-        congifs = [BinLunarLander]
+        # configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum]
+        configs = [BinLunarLander]
 
 
         print('\n' + '{:_^40}'.format("Running bins") + '\n')
 
-        for config, episodes in zip(congifs, episodes_per_env):
+        for config, episodes in zip(configs, episodes_per_env):
             print("Running ", config['map_name'])
 
             env = config['env']
@@ -124,11 +124,11 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
         
         # Tile Coding
-        # congifs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum]
-        congifs = [TileLunarLander]
+        # configs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum]
+        configs = [TileLunarLander]
 
         print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
-        for config, episodes in zip(congifs, episodes_per_env):
+        for config, episodes in zip(configs, episodes_per_env):
             print("Running ", config['name'])
 
             env = config['env']
