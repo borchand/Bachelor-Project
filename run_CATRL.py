@@ -48,7 +48,8 @@ def main(config, seed=None, verbose=False):
         decay,
         k_cap,
         seed=seed,
-        verbose=verbose
+        verbose=verbose,
+        do_abs_every=100
     )
 
     save_model(agent, log_info)

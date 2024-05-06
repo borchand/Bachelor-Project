@@ -40,22 +40,24 @@ from Code.icml.training_config_mac import ACROBOT as IcmlAcrobotMAC, CARTPOLE as
 from Code.icml.training_config_ppo import ACROBOT as IcmlAcrobotPPO, CARTPOLE as IcmlCartPolePPO, MOUNTAIN_CAR as IcmlMountainCarPPO, MOUNTAIN_CAR_CONTINUOUS as IcmlMountainCarContinuousPPO, LUNAR_LANDER as IcmlLunarLanderPPO, PENDULUM as IcmlPendulumPPO
 
 import torch
-print("Cuda available: ", torch.cuda.is_available())
-print("Cuda device count: ", torch.cuda.device_count())
-print("Cuda Current device: ", torch.cuda.get_device_name(0))
-print("Threads: ", torch.get_num_threads())
-print("stable-baselines3 device:", get_device(device='auto'))
+is_cuda_available = torch.cuda.is_available()
+print("Cuda available: ", is_cuda_available)
+if is_cuda_available:
+    print("Cuda device count: ", torch.cuda.device_count())
+    print("Cuda Current device: ", torch.cuda.get_device_name(0))
+    print("Threads: ", torch.get_num_threads())
+    print("stable-baselines3 device:", get_device(device='auto'))
 
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
-    CartPoleEpisodes = 1000
+    CartPoleEpisodes = 6000
     AcrobotEpisodes = 2000
     
-    MountainCarEpisodes = 3000
+    MountainCarEpisodes = 5000
     MountainCarContinuousEpisodes = 1000
     
-    LunarLanderEpisodes = 3000
-    PendulumEpisodes = 3000
+    LunarLanderEpisodes = 6000
+    PendulumEpisodes = 6000
 
     episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
     # episodes_per_env = [LunarLanderEpisodes]
@@ -63,9 +65,9 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     # seeds = random.sample(range(1000), run_exp_num)
     
     # Seeds for ICML
-    seeds = [237, 379, 482, 672, 886]
+    # seeds = [237, 379, 482, 672, 886]
     # Seeds for TC CATRL and BinQ
-    # seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
+    seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
 
     
     if run_icml_code:
@@ -95,10 +97,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
     if run_rest:
         # CATRL
-        print('\n' +'{:_^40}'.format("Running CAT-RL") + '\n')
-        
-        # configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum]
-        configs = [CATRLLunarLander]
+        configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum, CATRLLunarLander]
 
         print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
@@ -111,9 +110,11 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
             for i in tqdm(range(run_exp_num)):
                 run_CATRL(config, seed=seeds[i], verbose=False)
 
+        return
+
         # Bin Q Learning
-        # configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum]
-        configs = [BinLunarLander]
+        configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum, BinLunarLander]
+        # configs = [BinLunarLander]
 
 
         print('\n' + '{:_^40}'.format("Running bins") + '\n')
@@ -130,8 +131,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
         
         # Tile Coding
-        # configs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum]
-        configs = [TileLunarLander]
+        configs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum, TileLunarLander]
 
         print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
         for config, episodes in zip(configs, episodes_per_env):
