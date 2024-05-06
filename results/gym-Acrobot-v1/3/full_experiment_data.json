@@ -1,0 +1,21 @@
+{
+    "MDP": {
+        "name": "<class 'simple_rl.tasks.gym.GymMDPClass.GymMDP'>",
+        "params": {
+            "env_name": "Acrobot-v1"
+        }
+    },
+    "AGENTS": {
+        "<class 'simple_rl.abstraction.AbstractionWrapperClass.AbstractionWrapper'>": {
+            "params": {},
+            "index": 0
+        }
+    },
+    "MISC": {
+        "instances": 1,
+        "episodes": 5,
+        "steps": 10,
+        "track_disc_reward": false
+    },
+    "FUNC": "run_agents_on_mdp"
+}

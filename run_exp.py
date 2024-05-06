@@ -50,14 +50,14 @@ if is_cuda_available:
 
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
-    CartPoleEpisodes = 6000
+    CartPoleEpisodes = 1000
     AcrobotEpisodes = 2000
     
-    MountainCarEpisodes = 5000
+    MountainCarEpisodes = 3000
     MountainCarContinuousEpisodes = 1000
     
-    LunarLanderEpisodes = 6000
-    PendulumEpisodes = 6000
+    LunarLanderEpisodes = 3000
+    PendulumEpisodes = 3000
 
     episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
     # episodes_per_env = [LunarLanderEpisodes]
@@ -74,12 +74,13 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
         print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
         ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlLunarLanderPPO, IcmlPendulumPPO]
-        for ppo_config, episodes in zip(ppo_configs, [LunarLanderEpisodes]):
+        for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
 
             #     print("Running ", ppo_config['gym_name'])
 
             ppo_config['episode_max'] = episodes
             ppo_config['debug'] = True
+            ppo_config['train'] = True
             for i in tqdm(range(run_exp_num)):
                 run_icml(ppo_config, seed=seeds[i], verbose=False)
         
