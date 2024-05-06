@@ -65,22 +65,21 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     # seeds = random.sample(range(1000), run_exp_num)
     
     # Seeds for ICML
-    # seeds = [237, 379, 482, 672, 886]
+    seeds = [237, 379, 482, 672, 886]
     # Seeds for TC CATRL and BinQ
-    seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
+    # seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
 
     
     if run_icml_code:
 
-
         print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
-        ppo_configs = [IcmlLunarLanderPPO]
+        ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlLunarLanderPPO, IcmlPendulumPPO]
         for ppo_config, episodes in zip(ppo_configs, [LunarLanderEpisodes]):
 
             #     print("Running ", ppo_config['gym_name'])
 
             ppo_config['episode_max'] = episodes
-            ppo_config['debug'] = False
+            ppo_config['debug'] = True
             for i in tqdm(range(run_exp_num)):
                 run_icml(ppo_config, seed=seeds[i], verbose=False)
         
