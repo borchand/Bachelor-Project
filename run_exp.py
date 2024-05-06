@@ -79,7 +79,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
             #     print("Running ", ppo_config['gym_name'])
 
             ppo_config['episode_max'] = episodes
-            ppo_config['debug'] = True
+            ppo_config['debug'] = False
             for i in tqdm(range(run_exp_num)):
                 run_icml(ppo_config, seed=seeds[i], verbose=False)
         
