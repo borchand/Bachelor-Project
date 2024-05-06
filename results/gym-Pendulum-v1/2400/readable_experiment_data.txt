@@ -1,9 +1,0 @@
-(MDP)
-	gym-Pendulum-v1
-(Agents)
-	Q-learning_phi_4_ppo_886,0
-(Params)
-	instances : 1
-	episodes : 600
-	steps : 1000
-	track_disc_reward : False

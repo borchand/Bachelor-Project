@@ -1,9 +1,0 @@
-(MDP)
-	gym-MountainCarContinuous-v0
-(Agents)
-	Q-learning_phi_2_ppo_237,0
-(Params)
-	instances : 1
-	episodes : 5
-	steps : 10
-	track_disc_reward : False

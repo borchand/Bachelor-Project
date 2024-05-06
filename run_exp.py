@@ -80,7 +80,6 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
             ppo_config['episode_max'] = episodes
             ppo_config['debug'] = True
-            ppo_config['train'] = True
             for i in tqdm(range(run_exp_num)):
                 run_icml(ppo_config, seed=seeds[i], verbose=False)
         
