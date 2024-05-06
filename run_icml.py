@@ -129,6 +129,7 @@ def main(
         config["policy_episodes"] = policy_episodes
         config["k_bins"] = k_bins
         config['debug'] = debug
+    
     if algo == 'mac':
         
         if verbose:
@@ -140,7 +141,7 @@ def main(
             verbose=verbose,
             time_limit_sec=time_limit_sec)
     
-    else:
+    elif train or render_policy:
         if verbose:
             print("Running training of algorithm: ", algo, "in environment: ", gym_name, "for ", policy_episodes, "episodes.")
         
@@ -212,8 +213,11 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
     parser.add_argument('-a', '--algo', default='ppo', choices=['mac', 'dqn', 'ppo', 'sac'], help='Algorithm to use when training')
     parser.add_argument('-k', '--k-bins', default=1, help='Number of bins to discretize the action space', type=int)
-    parser.add_argument('-pep', '--policy_episodes', default=100, help='Number of episodes to train the model for', type=int)
-    parser.add_argument('-eep', '--experiment_episodes', default=100, help='Number of episodes to train the model for', type=int)
+    
+    parser.add_argument('-pep', '--policy_episodes', default=None, help='Number of episodes to train the model for', type=int)
+    parser.add_argument('-eep', '--experiment_episodes', default=None, help='Number of episodes to train the model for', type=int)
+    parser.add_argument('-ep', '--episode_max', default=1000, help='Maximum number of episodes to train the model for', type=int)
+    
     parser.add_argument('-seed', '--seed', default=42, help='Seed for reproducibility', type=int)
 
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
@@ -237,11 +241,17 @@ if __name__ == "__main__":
     render_policy = args.render_policy if args.render_policy is not None else args.render
     render_experiment = args.render_experiment if args.render_experiment is not None else args.render
     
+    if args.policy_episodes is None or args.experiment_episodes is None:
+        policy_episodes, experiment_episodes = split_max_episodes(args.episode_max)
+    else:
+        policy_episodes = args.policy_episodes
+        experiment_episodes = args.experiment_episodes
+    
     main(
         gym_name=args.env,
         algo=args.algo,
-        policy_episodes=args.policy_episodes,
-        experiment_episodes=args.experiment_episodes,
+        policy_episodes=policy_episodes,
+        experiment_episodes=experiment_episodes,
         abstraction=args.abstraction == 't',
         seed=args.seed,
         train=args.train == 't',
