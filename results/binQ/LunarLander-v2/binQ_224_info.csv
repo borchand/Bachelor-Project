@@ -1,0 +1,2 @@
+,seed,time,agent,env,episodes,epochs,success_rate
+0,224,148.77805972099304,binQ,LunarLander-v2,6000,1219947,0.015166666666666667
