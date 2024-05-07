@@ -7,10 +7,10 @@ class MountainCarContinuousEnv(ContinuousActionBaseEnv):
         This class defines the Mountain Car Continuous environment, which is a subclass of the BaseEnv class.
         It initializes the environment, and defines the step methods.
     """
-    def __init__(self, render=False):
+    def __init__(self, render=False, k_bins=2):
         super().__init__(
             EnvType.Mountain_Car_Continuous.value,
-            2,
+            k_bins,
             render=render)
 
     def step(self, action):  
