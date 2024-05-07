@@ -20,7 +20,7 @@ def split_max_episodes(max_episodes: int):
     
     return policy_episodes, experiment_episodes
 
-def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None):
+def icml_from_config(config: dict, seed=42, verbose=False, time_limit_sec=None):
 
     algo = config["algo"]
     gym_name = config["gym_name"]

@@ -72,12 +72,15 @@ def main(run_icml_code = False, run_rest = True):
         configs = [IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
         for config, episodes in zip(configs, episodes_per_env_icml):
             config['episode_max'] = episodes
-            print("Running ", config['map_name'])
+            config['train'] = True
+            config['debug'] = False
 
             for k in tqdm(k_bins):
-                run_icml(config,
-                        verbose=False,
-                        model_save=False, log_folder=f"k_bins_results-{k}/")
+                print("Running: ", config['gym_name'], " with k: ", k, ", episodes: ", episodes)
+                
+                run_icml(
+                        config=config,
+                        verbose=False)
 
     if run_rest:
         # test different bins for CATRL
