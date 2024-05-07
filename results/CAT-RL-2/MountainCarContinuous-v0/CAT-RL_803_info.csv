@@ -1,0 +1,2 @@
+,seed,time,agent,env,episodes,epochs,success_rate,abs_size
+0,803,7.860291957855225,CAT-RL,MountainCarContinuous-v0,1000,81493,0.994005994005994,4
