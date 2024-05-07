@@ -66,8 +66,8 @@ def main(run_icml_code = False, run_rest = True):
     episodes_per_env_icml = [MountainCarContinuousEpisodes, PendulumEpisodesIcml] 
     
     if run_icml_code:
-        # test different bins for CATRL
-        print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
+        # test different bins for PPO
+        print('\n' + '{:_^40}'.format("Running PPO") + '\n')
 
         configs = [IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
         for config, episodes in zip(configs, episodes_per_env_icml):
