@@ -51,14 +51,24 @@ if is_cuda_available:
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
     CartPoleEpisodes = 6000
+    
     AcrobotEpisodes = 2000
+    CartPoleEpisodesIcml = 1000
+    
     
     MountainCarEpisodes = 5000
+    MountainCarEpisodesIcml = 3000
+    MountainCarContinuousEpisodes = 5000
+
     MountainCarContinuousEpisodes = 1000
     
     LunarLanderEpisodes = 6000
+    LunarLanderEpisodesIcml = 6000
+    
     PendulumEpisodes = 6000
+    PendulumEpisodesIcml = 3000 
 
+    episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodesIcml, MountainCarEpisodesIcml, MountainCarContinuousEpisodes, LunarLanderEpisodesIcml, PendulumEpisodesIcml] 
     # episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes]
     episodes_per_env = [CartPoleEpisodes, PendulumEpisodes]
     # episodes_per_env = [LunarLanderEpisodes]
@@ -66,7 +76,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     # seeds = random.sample(range(1000), run_exp_num)
     
     # Seeds for ICML
-    # seeds = [237, 379, 482, 672, 886]
+    seeds_icml = [237, 379, 482, 672, 886]
     # Seeds for TC CATRL and BinQ
     seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
 
@@ -75,14 +85,14 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
         print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
         ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlLunarLanderPPO, IcmlPendulumPPO]
-        for ppo_config, episodes in zip(ppo_configs, episodes_per_env):
+        for ppo_config, episodes in zip(ppo_configs, episodes_per_env_imcl):
 
             #     print("Running ", ppo_config['gym_name'])
 
             ppo_config['episode_max'] = episodes
             ppo_config['debug'] = False
             for i in tqdm(range(run_exp_num)):
-                run_icml(ppo_config, seed=seeds[i], verbose=False)
+                run_icml(ppo_config, seed=seeds_icml[i], verbose=False)
         
         # print('\n' +'{:_^40}'.format("Running Icml MAC") + '\n')
         # mac_configs = [ IcmlAcrobotMAC, IcmlCartPoleMAC, IcmlMountainCarMAC, IcmlMountainCarContinuousMAC, IcmlLunarLanderMAC, IcmlPendulumMAC]
