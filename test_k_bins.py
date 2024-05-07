@@ -54,77 +54,96 @@ if is_cuda_available:
 
 
 
-def main():
+def main(run_icml_code = False, run_rest = True):
     k_bins = [2, 4, 8, 10, 25, 50, 100, 200]
 
-    CartPoleEpisodes = 6000
-    AcrobotEpisodes = 2000
-    
-    MountainCarEpisodes = 5000
-    MountainCarContinuousEpisodes = 1000
-    
-    LunarLanderEpisodes = 6000
+    MountainCarContinuousEpisodes = 1000    
     PendulumEpisodes = 6000
 
-    episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
+    PendulumEpisodesIcml = 3000
 
-    # test different bins for CATRL
-
-    print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
-
-
-    configs = [CATRLMountainCarContinuous, CATRLPendulum]
-    for config, episodes in zip(configs, episodes_per_env):
-        config['episode_max'] = episodes
-        print("Running ", config['map_name'])
-
-        for k in tqdm(k_bins):
-            if config["map_name"] == "MountainCarContinuous-v0":
-                config["env"] = MountainCarContinuousEnv(k_bins=k)
-            else:
-                config["env"] = PendulumEnv(k_bins=k)
-            run_CATRL(config, verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
-
-    # test different bins for TileCoding
-
-    print('\n' + '{:_^40}'.format("Running TileCoding") + '\n')
-
-    configs = [TileMountainCarContinuous, TilePendulum]
-    for config, episodes in zip(configs, episodes_per_env):
-
-        print("Running ", config['map_name'])
-        tiling_specs = config['tiling_specs']
-
-        for k in tqdm(k_bins):
-            if config["map_name"] == "MountainCarContinuous-v0":
-                config["env"] = MountainCarContinuousEnv(k_bins=k)
-            else:
-                config["env"] = PendulumEnv(k_bins=k)
-
-            env = config['env']
-
-            agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
-            run_tileCoding(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
+    episodes_per_env = [MountainCarContinuousEpisodes, PendulumEpisodes] 
+    episodes_per_env_icml = [MountainCarContinuousEpisodes, PendulumEpisodesIcml] 
     
-    # test different bins for BinQ
+    if run_icml_code:
+        # test different bins for CATRL
+        print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
-    print('\n' + '{:_^40}'.format("Running BinQ") + '\n')
+        configs = [IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
+        for config, episodes in zip(configs, episodes_per_env_icml):
+            config['episode_max'] = episodes
+            print("Running ", config['map_name'])
 
-    configs = [BinMountainCarContinuous, BinPendulum]
-    for config, episodes in zip(configs, episodes_per_env):
+            for k in tqdm(k_bins):
+                run_icml(config,
+                        verbose=False,
+                        model_save=False, log_folder=f"k_bins_results-{k}/")
 
-        print("Running ", config['map_name'])
+    if run_rest:
+        # test different bins for CATRL
+        print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
-        for k in tqdm(k_bins):
-            if config["map_name"] == "MountainCarContinuous-v0":
-                config["env"] = MountainCarContinuousEnv(k_bins=k)
-            else:
-                config["env"] = PendulumEnv(k_bins=k)
+        configs = [CATRLMountainCarContinuous, CATRLPendulum]
+        for config, episodes in zip(configs, episodes_per_env):
+            config['episode_max'] = episodes
+            print("Running ", config['map_name'])
 
-            env = config['env']
-            
-            agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], verbose=False)
-            run_binQ(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
+            for k in tqdm(k_bins):
+                if config["map_name"] == "MountainCarContinuous-v0":
+                    config["env"] = MountainCarContinuousEnv(k_bins=k)
+                else:
+                    config["env"] = PendulumEnv(k_bins=k)
+                run_CATRL(config, verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
+
+        # test different bins for TileCoding
+
+        print('\n' + '{:_^40}'.format("Running TileCoding") + '\n')
+
+        configs = [TileMountainCarContinuous, TilePendulum]
+        for config, episodes in zip(configs, episodes_per_env):
+
+            print("Running ", config['map_name'])
+            tiling_specs = config['tiling_specs']
+
+            for k in tqdm(k_bins):
+                if config["map_name"] == "MountainCarContinuous-v0":
+                    config["env"] = MountainCarContinuousEnv(k_bins=k)
+                else:
+                    config["env"] = PendulumEnv(k_bins=k)
+
+                env = config['env']
+
+                agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
+                run_tileCoding(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
+    
+        # test different bins for BinQ
+
+        print('\n' + '{:_^40}'.format("Running BinQ") + '\n')
+
+        configs = [BinMountainCarContinuous, BinPendulum]
+        for config, episodes in zip(configs, episodes_per_env):
+
+            print("Running ", config['map_name'])
+
+            for k in tqdm(k_bins):
+                if config["map_name"] == "MountainCarContinuous-v0":
+                    config["env"] = MountainCarContinuousEnv(k_bins=k)
+                else:
+                    config["env"] = PendulumEnv(k_bins=k)
+
+                env = config['env']
+                
+                agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], verbose=False)
+                run_binQ(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
 
 if __name__ == "__main__":
-    main()
+    
+    parser = argparse.ArgumentParser(description='Run experiments')
+    
+    parser.add_argument('-icml', '--icml', default='f', choices=['f', 't'], help='Run ICML experiments')
+    parser.add_argument('-r', '--rest', default='t', choices=['f', 't'], help='Run rest of the experiments')
+
+    args = parser.parse_args()
+
+    main(run_icml_code=args.icml == 't',
+         run_rest=args.rest == 't')
