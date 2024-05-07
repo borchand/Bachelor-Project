@@ -50,14 +50,14 @@ if is_cuda_available:
 
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
-    CartPoleEpisodes = 1000
+    CartPoleEpisodes = 6000
     AcrobotEpisodes = 2000
     
-    MountainCarEpisodes = 3000
+    MountainCarEpisodes = 5000
     MountainCarContinuousEpisodes = 1000
     
-    LunarLanderEpisodes = 3000
-    PendulumEpisodes = 3000
+    LunarLanderEpisodes = 6000
+    PendulumEpisodes = 6000
 
     episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
     # episodes_per_env = [LunarLanderEpisodes]
