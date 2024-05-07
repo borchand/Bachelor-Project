@@ -59,7 +59,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     LunarLanderEpisodes = 6000
     PendulumEpisodes = 6000
 
-    episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes] 
+    # episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes]
+    episodes_per_env = [CartPoleEpisodes, PendulumEpisodes]
     # episodes_per_env = [LunarLanderEpisodes]
     # create seeds
     # seeds = random.sample(range(1000), run_exp_num)
