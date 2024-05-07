@@ -22,7 +22,6 @@ class PendulumEnv(ContinuousActionBaseEnv):
 
         x, y, velocity = new_state
         if abs(y) < 0.2 and x > 0 and abs(velocity) < 0.2:
-                success = True
                 reward += 10
 
 
