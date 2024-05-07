@@ -51,14 +51,13 @@ if is_cuda_available:
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
     CartPoleEpisodes = 6000
+    CartPoleEpisodesIcml = 1000
     
     AcrobotEpisodes = 2000
-    CartPoleEpisodesIcml = 1000
     
     
     MountainCarEpisodes = 5000
     MountainCarEpisodesIcml = 3000
-    MountainCarContinuousEpisodes = 5000
 
     MountainCarContinuousEpisodes = 1000
     
