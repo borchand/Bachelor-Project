@@ -55,7 +55,7 @@ if is_cuda_available:
 
 
 def main():
-    k_bins = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+    k_bins = [2, 4, 8, 10, 25, 50, 100, 200]
 
     CartPoleEpisodes = 6000
     AcrobotEpisodes = 2000
