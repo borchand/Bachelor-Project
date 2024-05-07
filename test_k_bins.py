@@ -83,7 +83,7 @@ def main():
                 config["env"] = MountainCarContinuousEnv(k_bins=k)
             else:
                 config["env"] = PendulumEnv(k_bins=k)
-            run_CATRL(config, verbose=False, model_save=False, log_folder="k_bins_results/")
+            run_CATRL(config, verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
 
     # test different bins for TileCoding
 
@@ -104,7 +104,7 @@ def main():
             env = config['env']
 
             agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
-            run_tileCoding(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder="k_bins_results/")
+            run_tileCoding(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
     
     # test different bins for BinQ
 
@@ -124,7 +124,7 @@ def main():
             env = config['env']
             
             agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], verbose=False)
-            run_binQ(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder="k_bins_results/")
+            run_binQ(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
 
 if __name__ == "__main__":
     main()
