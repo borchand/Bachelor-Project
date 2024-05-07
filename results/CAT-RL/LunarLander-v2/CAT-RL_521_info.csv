@@ -1,2 +1,2 @@
 ,seed,time,agent,env,episodes,epochs,success_rate,abs_size
-0,521,109.9655990600586,CAT-RL,LunarLander-v2,6000,460903,0.0,5866
+0,521,262.78799319267273,CAT-RL,LunarLander-v2,6000,472888,0.0,15556

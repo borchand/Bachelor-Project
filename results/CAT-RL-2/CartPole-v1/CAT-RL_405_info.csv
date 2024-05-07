@@ -1,2 +1,0 @@
-,seed,time,agent,env,episodes,epochs,success_rate,abs_size
-0,405,30.06458616256714,CAT-RL,CartPole-v1,6000,243613,0.0,466
