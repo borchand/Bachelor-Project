@@ -96,7 +96,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
     if run_rest:
         # CATRL
-        configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum, CATRLLunarLander]
+        # configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum, CATRLLunarLander]
+        configs = [CATRLCartPole, CATRLPendulum]
 
         print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
@@ -109,11 +110,9 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
             for i in tqdm(range(run_exp_num)):
                 run_CATRL(config, seed=seeds[i], verbose=False)
 
-        return
-
         # Bin Q Learning
-        configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum, BinLunarLander]
-        # configs = [BinLunarLander]
+        # configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum, BinLunarLander]
+        configs = [BinCartPole, BinPendulum]
 
 
         print('\n' + '{:_^40}'.format("Running bins") + '\n')
@@ -130,7 +129,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
 
         
         # Tile Coding
-        configs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum, TileLunarLander]
+        # configs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum, TileLunarLander]
+        configs = [TileCartPole, TilePendulum]
 
         print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
         for config, episodes in zip(configs, episodes_per_env):
