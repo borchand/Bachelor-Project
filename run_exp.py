@@ -67,7 +67,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     PendulumEpisodes = 6000
     PendulumEpisodesIcml = 3000 
 
-    episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodesIcml, MountainCarEpisodesIcml, MountainCarContinuousEpisodes, LunarLanderEpisodesIcml, PendulumEpisodesIcml] 
+    episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodesIcml, MountainCarEpisodesIcml, MountainCarContinuousEpisodes, PendulumEpisodesIcml, LunarLanderEpisodesIcml] 
     # episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes]
     episodes_per_env = [CartPoleEpisodes, PendulumEpisodes]
     # episodes_per_env = [LunarLanderEpisodes]
@@ -83,7 +83,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     if run_icml_code:
 
         print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
-        ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlLunarLanderPPO, IcmlPendulumPPO]
+        ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
         for ppo_config, episodes in zip(ppo_configs, episodes_per_env_imcl):
 
             #     print("Running ", ppo_config['gym_name'])
