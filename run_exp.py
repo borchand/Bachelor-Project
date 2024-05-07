@@ -65,9 +65,9 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     # seeds = random.sample(range(1000), run_exp_num)
     
     # Seeds for ICML
-    seeds = [237, 379, 482, 672, 886]
+    # seeds = [237, 379, 482, 672, 886]
     # Seeds for TC CATRL and BinQ
-    # seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
+    seeds =  [224, 389, 405, 432, 521, 580, 639, 673, 803, 869]
 
     
     if run_icml_code:
