@@ -84,8 +84,8 @@ def main():
                 "success": []
             }
 
-            abstract = load_abstraction(env['name'], seed)
-            agent = load_model(env['name'], seed)
+            abstract = load_abstraction(env['map_name'], seed)
+            agent = load_model(env['map_name'], seed)
             
             for j in range(episodes):
                 state = env.reset()
@@ -101,7 +101,7 @@ def main():
                 log_data["reward"].append(reward)
                 log_data["epochs"].append(j)
                 log_data["success"].append(success)
-            save_log_2(log_data, "CAT-RL", seed, env['name'])
+            save_log_2(log_data, "CAT-RL", seed, env['map_name'])
 
     # run TileCoding with trained models
     config = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TileLunarLander, TilePendulum]
@@ -115,7 +115,7 @@ def main():
                 "success": []
             }
 
-            agent = load_model(env['name'], seed)
+            agent = load_model(env['map_name'], seed)
             
             for j in range(episodes):
                 state = env.reset()
@@ -130,7 +130,7 @@ def main():
                 log_data["reward"].append(reward)
                 log_data["epochs"].append(j)
                 log_data["success"].append(success)
-            save_log_2(log_data, "TileCoding", seed, env['name'])
+            save_log_2(log_data, "TileCoding", seed, env['map_name'])
 
 
     # run Bin Q Learning with trained models
@@ -160,7 +160,7 @@ def main():
                 log_data["reward"].append(reward)
                 log_data["epochs"].append(j)
                 log_data["success"].append(success)
-            save_log_2(log_data, "BinQLearning", seed, env['name'])
+            save_log_2(log_data, "BinQLearning", seed, env['map_name'])
 
 
 
