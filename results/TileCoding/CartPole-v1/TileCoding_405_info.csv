@@ -1,2 +1,2 @@
 ,seed,time,agent,env,episodes,epochs,success_rate
-0,405,107.16105437278748,TileCoding,CartPole-v1,6000,217213,0.0
+0,405,9.213785171508789,TileCoding,CartPole-v1,2000,21141,0.0

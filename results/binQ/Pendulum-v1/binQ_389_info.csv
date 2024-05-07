@@ -1,2 +1,2 @@
 ,seed,time,agent,env,episodes,epochs,success_rate
-0,389,127.6153495311737,binQ,Pendulum-v1,6000,1200000,0.06616666666666667
+0,389,19.327850341796875,binQ,Pendulum-v1,1000,200000,0.001

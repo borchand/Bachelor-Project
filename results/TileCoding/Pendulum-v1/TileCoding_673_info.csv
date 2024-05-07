@@ -1,2 +1,2 @@
 ,seed,time,agent,env,episodes,epochs,success_rate
-0,673,990.3308086395264,TileCoding,Pendulum-v1,6000,1200000,0.06683333333333333
+0,673,144.6124198436737,TileCoding,Pendulum-v1,1000,200000,0.018
