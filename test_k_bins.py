@@ -63,6 +63,8 @@ def main(run_icml_code = False, run_rest = True):
 
     episodes_per_env = [MountainCarContinuousEpisodes, PendulumEpisodes] 
     
+    seeds = random.sample(range(1000), len(k_bins))
+
     if run_icml_code:
         # test different bins for PPO
         print('\n' + '{:_^40}'.format("Running PPO") + '\n')
@@ -73,12 +75,13 @@ def main(run_icml_code = False, run_rest = True):
             config['train'] = True
             config['debug'] = False
 
-            for k in tqdm(k_bins):
-                print("Running: ", config['gym_name'], " with k: ", k, ", episodes: ", episodes)
+            for i, k in enumerate(tqdm(k_bins)):
                 
+                print("Running: ", config['gym_name'], " with k: ", k, ", episodes: ", episodes, ", seed: ", seeds[i])
                 run_icml(
                         config=config,
-                        verbose=False)
+                        verbose=False,
+                        seed=seeds[i])
 
     if run_rest:
         # test different bins for CATRL
