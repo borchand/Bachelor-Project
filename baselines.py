@@ -146,9 +146,6 @@ class RewardShapingWrapper(gym.Wrapper):
         if self.env.unwrapped.spec.id == "MountainCarContinuous-v0":
             return self._MountainCar_reward_shaping_end
 
-        if self.env.unwrapped.spec.id == "CartPole-v1":
-            return self._CartPole_reward_shaping_end
-        
         if self.env.unwrapped.spec.id == "Pendulum-v1":
             return self._Pendulum_reward_shaping_end
         
