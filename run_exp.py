@@ -48,7 +48,58 @@ if is_cuda_available:
     print("Threads: ", torch.get_num_threads())
     print("stable-baselines3 device:", get_device(device='auto'))
 
-def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
+def get_one_config_icml(env_name: str):
+    
+    if env_name.lower() == "cartpole":
+        return [IcmlCartPolePPO]
+    
+    if env_name.lower() == "acrobot":
+        return [IcmlAcrobotPPO]
+    
+    if env_name.lower() == "mountaincar":
+        return [IcmlMountainCarPPO]
+    
+    if env_name.lower() == "mountaincarcontinuous":
+        return [IcmlMountainCarContinuousPPO]
+    
+    if env_name.lower() == "pendulum":
+        return [IcmlPendulumPPO]
+
+    if env_name.lower() == "lunarlander":
+        return [IcmlLunarLanderPPO]
+    
+    return None
+
+def get_one_env_icml_episodes(env_name: str):
+    CartPoleEpisodesIcml = 1000
+    AcrobotEpisodesIcml = 2000
+    MountainCarEpisodesIcml = 3000
+    MountainCarContinuousEpisodesIcml = 1000
+    LunarLanderEpisodesIcml = 3000
+    PendulumEpisodesIcml = 3000 
+
+    if env_name.lower() == "cartpole":
+        return [CartPoleEpisodesIcml]
+        # episodes_per_env = [LunarLanderEpisodes]
+    
+    if env_name.lower() == "acrobot":
+        return [AcrobotEpisodesIcml]
+    
+    if env_name.lower() == "mountaincar":
+        return [MountainCarEpisodesIcml]
+    
+    if env_name.lower() == "mountaincarcontinuous":
+        return [MountainCarContinuousEpisodesIcml]
+    
+    if env_name.lower() == "pendulum":
+        return [PendulumEpisodesIcml]
+
+    if env_name.lower() == "lunarlander":
+        return [LunarLanderEpisodesIcml]
+    
+    return None
+
+def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str = "all"):
     
     CartPoleEpisodes = 6000
     CartPoleEpisodesIcml = 1000
@@ -66,11 +117,18 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
     
     PendulumEpisodes = 6000
     PendulumEpisodesIcml = 3000 
-
-    episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodesIcml, MountainCarEpisodesIcml, MountainCarContinuousEpisodes, PendulumEpisodesIcml, LunarLanderEpisodesIcml] 
-    # episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes]
-    episodes_per_env = [CartPoleEpisodes, PendulumEpisodes]
-    # episodes_per_env = [LunarLanderEpisodes]
+    
+    episodes_per_env_imcl = []
+    episodes_per_env = []
+    # For icml to run one env at a time
+    if run_env == "all" or run_env == None:
+        episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodesIcml, MountainCarEpisodesIcml, MountainCarContinuousEpisodes, PendulumEpisodesIcml, LunarLanderEpisodesIcml] 
+        episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes]
+    else: 
+        # For icml 
+        episodes_per_env_imcl = get_one_env_icml_episodes(run_env)
+        ppo_configs = get_one_config_icml(run_env)
+    
     # create seeds
     # seeds = random.sample(range(1000), run_exp_num)
     
@@ -86,8 +144,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True):
         ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
         for ppo_config, episodes in zip(ppo_configs, episodes_per_env_imcl):
 
-            #     print("Running ", ppo_config['gym_name'])
-
+            print("Running: ", ppo_config['gym_name'], " for ", episodes, "total episodes")
             ppo_config['episode_max'] = episodes
             ppo_config['debug'] = False
             for i in tqdm(range(run_exp_num)):
@@ -161,7 +218,12 @@ if __name__ == "__main__":
     parser.add_argument('-n', '--num', type=int, default=20, help='Number of experiments to run')
     parser.add_argument('-icml', '--icml', default='f', choices=['f', 't'], help='Run ICML experiments')
     parser.add_argument('-r', '--rest', default='t', choices=['f', 't'], help='Run rest of the experiments')
-
+    parser.add_argument('-e', '--env', default='all', type=str, help='Run experiments for specific environment')
+    
     args = parser.parse_args()
 
-    main(args.num, args.icml == 't', args.rest == 't')
+    main(
+        run_exp_num=args.num,
+        run_icml_code=args.icml == 't',
+        run_rest=args.rest == 't',
+        run_env=args.env)
