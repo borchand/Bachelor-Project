@@ -61,17 +61,14 @@ def main(run_icml_code = False, run_rest = True):
     MountainCarContinuousEpisodes = 1000    
     PendulumEpisodes = 6000
 
-    PendulumEpisodesIcml = 3000
-
     episodes_per_env = [MountainCarContinuousEpisodes, PendulumEpisodes] 
-    episodes_per_env_icml = [MountainCarContinuousEpisodes, PendulumEpisodesIcml] 
     
     if run_icml_code:
         # test different bins for PPO
         print('\n' + '{:_^40}'.format("Running PPO") + '\n')
 
         configs = [IcmlMountainCarContinuousPPO, IcmlPendulumPPO]
-        for config, episodes in zip(configs, episodes_per_env_icml):
+        for config, episodes in zip(configs, episodes_per_env):
             config['episode_max'] = episodes
             config['train'] = True
             config['debug'] = False
