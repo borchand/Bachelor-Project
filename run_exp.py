@@ -123,7 +123,8 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
     # For icml to run one env at a time
     if run_env == "all" or run_env == None:
         episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodesIcml, MountainCarEpisodesIcml, MountainCarContinuousEpisodes, PendulumEpisodesIcml, LunarLanderEpisodesIcml] 
-        episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes]
+        # episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes]
+        episodes_per_env = [MountainCarContinuousEpisodes, PendulumEpisodes]
         ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
     else: 
         # For icml 
@@ -165,7 +166,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
     if run_rest:
         # CATRL
         # configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum, CATRLLunarLander]
-        configs = [CATRLCartPole, CATRLPendulum]
+        configs = [CATRLMountainCarContinuous, CATRLPendulum]
 
         print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
@@ -180,7 +181,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
 
         # Bin Q Learning
         # configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum, BinLunarLander]
-        configs = [BinCartPole, BinPendulum]
+        configs = [BinMountainCarContinuous, BinPendulum]
 
 
         print('\n' + '{:_^40}'.format("Running bins") + '\n')
@@ -198,7 +199,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
         
         # Tile Coding
         # configs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum, TileLunarLander]
-        configs = [TileCartPole, TilePendulum]
+        configs = [TileMountainCarContinuous, TilePendulum]
 
         print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
         for config, episodes in zip(configs, episodes_per_env):
