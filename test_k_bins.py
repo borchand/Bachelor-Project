@@ -56,7 +56,7 @@ if is_cuda_available:
 
 def main(run_icml_code = False, run_rest = True):
     # k_bins = [2, 4, 8, 10, 25, 50, 100, 200]
-    k_bins = [100, 200]
+    k_bins = [2, 4, 8, 10, 25, 50]
 
     MountainCarContinuousEpisodes = 1000    
     PendulumEpisodes = 6000
@@ -101,24 +101,24 @@ def main(run_icml_code = False, run_rest = True):
 
         # test different bins for TileCoding
 
-        print('\n' + '{:_^40}'.format("Running TileCoding") + '\n')
+        # print('\n' + '{:_^40}'.format("Running TileCoding") + '\n')
 
-        configs = [TileMountainCarContinuous, TilePendulum]
-        for config, episodes in zip(configs, episodes_per_env):
+        # configs = [TileMountainCarContinuous, TilePendulum]
+        # for config, episodes in zip(configs, episodes_per_env):
 
-            print("Running ", config['map_name'])
-            tiling_specs = config['tiling_specs']
+        #     print("Running ", config['map_name'])
+        #     tiling_specs = config['tiling_specs']
 
-            for k in tqdm(k_bins):
-                if config["map_name"] == "MountainCarContinuous-v0":
-                    config["env"] = MountainCarContinuousEnv(k_bins=k)
-                else:
-                    config["env"] = PendulumEnv(k_bins=k)
+        #     for k in tqdm(k_bins):
+        #         if config["map_name"] == "MountainCarContinuous-v0":
+        #             config["env"] = MountainCarContinuousEnv(k_bins=k)
+        #         else:
+        #             config["env"] = PendulumEnv(k_bins=k)
 
-                env = config['env']
+        #         env = config['env']
 
-                agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
-                run_tileCoding(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
+        #         agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
+        #         run_tileCoding(env, agent, episodes, config['map_name'], verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
     
         # test different bins for BinQ
 
