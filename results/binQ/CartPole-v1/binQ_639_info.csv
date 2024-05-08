@@ -1,2 +1,2 @@
 ,seed,time,agent,env,episodes,epochs,success_rate
-0,639,1.5937120914459229,binQ,CartPole-v1,2000,26008,0.0
+0,639,3.617725133895874,binQ,CartPole-v1,6000,61411,0.0
