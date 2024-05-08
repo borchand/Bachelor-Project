@@ -55,7 +55,8 @@ if is_cuda_available:
 
 
 def main(run_icml_code = False, run_rest = True):
-    k_bins = [2, 4, 8, 10, 25, 50, 100, 200]
+    # k_bins = [2, 4, 8, 10, 25, 50, 100, 200]
+    k_bins = [100, 200]
 
     MountainCarContinuousEpisodes = 1000    
     PendulumEpisodes = 6000
@@ -84,19 +85,19 @@ def main(run_icml_code = False, run_rest = True):
 
     if run_rest:
         # test different bins for CATRL
-        print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
+        # print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
-        configs = [CATRLMountainCarContinuous, CATRLPendulum]
-        for config, episodes in zip(configs, episodes_per_env):
-            config['episode_max'] = episodes
-            print("Running ", config['map_name'])
+        # configs = [CATRLMountainCarContinuous, CATRLPendulum]
+        # for config, episodes in zip(configs, episodes_per_env):
+        #     config['episode_max'] = episodes
+        #     print("Running ", config['map_name'])
 
-            for k in tqdm(k_bins):
-                if config["map_name"] == "MountainCarContinuous-v0":
-                    config["env"] = MountainCarContinuousEnv(k_bins=k)
-                else:
-                    config["env"] = PendulumEnv(k_bins=k)
-                run_CATRL(config, verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
+        #     for k in tqdm(k_bins):
+        #         if config["map_name"] == "MountainCarContinuous-v0":
+        #             config["env"] = MountainCarContinuousEnv(k_bins=k)
+        #         else:
+        #             config["env"] = PendulumEnv(k_bins=k)
+        #         run_CATRL(config, verbose=False, model_save=False, log_folder=f"k_bins_results-{k}/")
 
         # test different bins for TileCoding
 
