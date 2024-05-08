@@ -124,11 +124,13 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
     if run_env == "all" or run_env == None:
         episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodesIcml, MountainCarEpisodesIcml, MountainCarContinuousEpisodes, PendulumEpisodesIcml, LunarLanderEpisodesIcml] 
         episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, LunarLanderEpisodes, PendulumEpisodes]
+        ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
     else: 
         # For icml 
         episodes_per_env_imcl = get_one_env_icml_episodes(run_env)
         ppo_configs = get_one_config_icml(run_env)
     
+    print("run_env: ", run_env)
     # create seeds
     # seeds = random.sample(range(1000), run_exp_num)
     
@@ -141,7 +143,6 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
     if run_icml_code:
 
         print('\n' +'{:_^40}'.format("Running Icml PPO") + '\n')
-        ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
         for ppo_config, episodes in zip(ppo_configs, episodes_per_env_imcl):
 
             print("Running: ", ppo_config['gym_name'], " for ", episodes, "total episodes")
