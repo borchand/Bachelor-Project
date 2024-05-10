@@ -75,7 +75,7 @@ def main(run_icml_code = False, run_rest = True):
             config['debug'] = False
 
             for i, k in enumerate(tqdm(k_bins)):
-                
+                config["k_bins"] = k
                 print("Running: ", config['gym_name'], " with k: ", k, ", episodes: ", episodes, ", seed: ", seeds[i])
                 run_icml(
                         config=config,
