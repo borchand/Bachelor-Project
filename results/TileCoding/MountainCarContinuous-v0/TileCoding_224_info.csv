@@ -1,2 +1,2 @@
 ,seed,time,agent,env,episodes,epochs,success_rate
-0,224,1311.0492448806763,TileCoding,MountainCarContinuous-v0,1000,507589,0.723
+0,224,1386.2842581272125,TileCoding,MountainCarContinuous-v0,1000,541097,0.685
