@@ -166,35 +166,35 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
     if run_rest:
         # CATRL
         # configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum, CATRLLunarLander]
-        configs = [CATRLMountainCarContinuous, CATRLPendulum]
+        # configs = [CATRLMountainCarContinuous, CATRLPendulum]
 
-        print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
+        # print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
-        for config, episodes in zip(configs, episodes_per_env):
+        # for config, episodes in zip(configs, episodes_per_env):
 
-            print("Running ", config['map_name'])
+        #     print("Running ", config['map_name'])
 
-            env = config['env']
-            config['episode_max'] = episodes
-            for i in tqdm(range(run_exp_num)):
-                run_CATRL(config, seed=seeds[i], verbose=False)
+        #     env = config['env']
+        #     config['episode_max'] = episodes
+        #     for i in tqdm(range(run_exp_num)):
+        #         run_CATRL(config, seed=seeds[i], verbose=False)
 
         # Bin Q Learning
         # configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum, BinLunarLander]
-        configs = [BinMountainCarContinuous, BinPendulum]
+        # configs = [BinMountainCarContinuous, BinPendulum]
 
 
-        print('\n' + '{:_^40}'.format("Running bins") + '\n')
+        # print('\n' + '{:_^40}'.format("Running bins") + '\n')
 
-        for config, episodes in zip(configs, episodes_per_env):
-            print("Running ", config['map_name'])
+        # for config, episodes in zip(configs, episodes_per_env):
+        #     print("Running ", config['map_name'])
 
-            env = config['env']
+        #     env = config['env']
 
-            for i in tqdm(range(run_exp_num)):
-                agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], seed=seeds[i], verbose=False)
+        #     for i in tqdm(range(run_exp_num)):
+        #         agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], seed=seeds[i], verbose=False)
 
-                run_binQ(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
+        #         run_binQ(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
 
         
         # Tile Coding
