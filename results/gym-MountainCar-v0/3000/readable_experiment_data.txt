@@ -1,9 +1,9 @@
 (MDP)
-	gym-CartPole-v1
+	gym-MountainCar-v0
 (Agents)
 	Q-learning_phi_ppo_886,0
 (Params)
 	instances : 1
-	episodes : 2400
+	episodes : 2000
 	steps : 1000
 	track_disc_reward : False
