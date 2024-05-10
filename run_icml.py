@@ -11,11 +11,12 @@ import baselines
 import argparse
 import Code.icml.utils as utils
 
-def split_max_episodes(max_episodes: int):
+def split_max_episodes(max_episodes: int, policy_episode_percent: int = 0.6):
     """
     Split the maximum number of episodes into training and experiment episodes
+    The split is 60/40 by default, 60% policy 40% experiment
     """
-    policy_episodes = int(max_episodes * 0.8)
+    policy_episodes = int(max_episodes * policy_episode_percent)
     experiment_episodes = max_episodes - policy_episodes
     
     return policy_episodes, experiment_episodes
