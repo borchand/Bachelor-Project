@@ -75,8 +75,12 @@ def main():
     # run CAT-RL with trained models
     config = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLLunarLander, CATRLPendulum]
 
+    agent_name = "CAT-RL"
     for env in config:
-        for seed in seeds:
+
+        print("Running CAT-RL for ", env['map_name'])
+
+        for seed in tqdm(seeds):
             log_data = {
                 "episode": [],
                 "reward": [],
@@ -84,30 +88,36 @@ def main():
                 "success": []
             }
 
-            abstract = load_abstraction(env['map_name'], seed)
-            agent = load_model(env['map_name'], seed)
-            
+            abstract = load_abstraction(agent_name, env['map_name'], seed)
+            agent = load_model(agent_name, env['map_name'], seed)
+            _env = env['env']
             for j in range(episodes):
-                state = env.reset()
+                total_reward = 0
+                epochs = 0
+                state = _env.reset()
                 done = False
                 while not done:
-                    env.render()
                     state_abs = abstract.state(state)
                     action = agent.policy(state_abs)
-                    new_state, reward, done, success = env.step(action) 
+                    new_state, reward, done, success = _env.step(action) 
+                    total_reward += reward
+                    epochs += 1
                     state = new_state
 
                 log_data["episode"].append(j)
-                log_data["reward"].append(reward)
-                log_data["epochs"].append(j)
+                log_data["reward"].append(total_reward)
+                log_data["epochs"].append(epochs)
                 log_data["success"].append(success)
             save_log_2(log_data, "CAT-RL", seed, env['map_name'])
 
     # run TileCoding with trained models
     config = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TileLunarLander, TilePendulum]
-
+    agent_name = "TileCoding"
     for env in config:
-        for seed in seeds:
+
+        print("Running TileCoding for ", env['map_name'])
+
+        for seed in tqdm(seeds):
             log_data = {
                 "episode": [],
                 "reward": [],
@@ -115,29 +125,35 @@ def main():
                 "success": []
             }
 
-            agent = load_model(env['map_name'], seed)
-            
+            agent = load_model(agent_name, env['map_name'], seed)
+            _env = env['env']
             for j in range(episodes):
-                state = env.reset()
+                total_reward = 0
+                epochs = 0
+                state = _env.reset()
                 done = False
                 while not done:
-                    env.render()
                     action = agent.choose_action(state)
-                    new_state, reward, done, success = env.step(action)
+                    new_state, reward, done, success = _env.step(action)
+                    total_reward += reward
+                    epochs += 1
                     state = new_state
 
                 log_data["episode"].append(j)
-                log_data["reward"].append(reward)
-                log_data["epochs"].append(j)
+                log_data["reward"].append(total_reward)
+                log_data["epochs"].append(epochs)
                 log_data["success"].append(success)
             save_log_2(log_data, "TileCoding", seed, env['map_name'])
 
 
     # run Bin Q Learning with trained models
     config = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinLunarLander, BinPendulum]
-
+    agent_name = "binQ"
     for env in config:
-        for seed in seeds:
+
+        print("Running Bin Q Learning for ", env['map_name'])
+
+        for seed in tqdm(seeds):
             log_data = {
                 "episode": [],
                 "reward": [],
@@ -145,22 +161,27 @@ def main():
                 "success": []
             }
 
-            agent = load_model(env['name'], seed)
+            agent = load_model(agent_name, env['map_name'], seed)
             
+            _env = env['env']
             for j in range(episodes):
-                state = env.reset()
+                total_reward = 0
+                epochs = 0
+                state = _env.reset()
                 done = False
+                action = agent.reset_episode(state)
                 while not done:
-                    env.render()
-                    action = agent.choose_action(state)
-                    new_state, reward, done, success = env.step(action)
+                    action = agent.act(state, mode="test")
+                    new_state, reward, done, success = _env.step(action)
+                    total_reward += reward
+                    epochs += 1
                     state = new_state
-
+                
                 log_data["episode"].append(j)
-                log_data["reward"].append(reward)
-                log_data["epochs"].append(j)
+                log_data["reward"].append(total_reward)
+                log_data["epochs"].append(epochs)
                 log_data["success"].append(success)
-            save_log_2(log_data, "BinQLearning", seed, env['map_name'])
+            save_log_2(log_data, "binQ", seed, env['map_name'])
 
 
 
