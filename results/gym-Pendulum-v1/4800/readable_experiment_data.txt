@@ -1,7 +1,7 @@
 (MDP)
 	gym-Pendulum-v1
 (Agents)
-	Q-learning_phi_4_ppo_270,0
+	Q-learning_phi_4_ppo_137,0
 (Params)
 	instances : 1
 	episodes : 1200
