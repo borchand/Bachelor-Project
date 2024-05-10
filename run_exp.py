@@ -71,12 +71,12 @@ def get_one_config_icml(env_name: str):
     return None
 
 def get_one_env_icml_episodes(env_name: str):
-    CartPoleEpisodesIcml = 1000
+    CartPoleEpisodesIcml = 6000
     AcrobotEpisodesIcml = 2000
-    MountainCarEpisodesIcml = 3000
+    MountainCarEpisodesIcml = 5000
     MountainCarContinuousEpisodesIcml = 1000
-    LunarLanderEpisodesIcml = 3000
-    PendulumEpisodesIcml = 3000 
+    LunarLanderEpisodesIcml = 6000
+    PendulumEpisodesIcml = 6000 
 
     if env_name.lower() == "cartpole":
         return [CartPoleEpisodesIcml]
