@@ -1,11 +1,43 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
+from run_icml import split_max_episodes
+
 plt.rcParams['figure.dpi'] = 100
 plt.rcParams['savefig.dpi'] = 100
 
 import pandas as pd
 sns.set_theme(rc={"figure.dpi":100, 'savefig.dpi':6000})
 plt.style.use('seaborn-whitegrid')
+
+
+CartPoleEpisodes = 6000
+AcrobotEpisodes = 2000
+MountainCarEpisodes = 3000
+MountainCarContinuousEpisodes = 1000
+LunarLanderEpisodes = 3000
+PendulumEpisodes = 6000
+
+PENDULUM_K = 4
+MOUNTAINCARCONTINUOUS_K = 2
+
+# envs
+max_episodes_dict = {
+    "Acrobot-v1": AcrobotEpisodes,
+    "CartPole-v1": CartPoleEpisodes,
+    "MountainCar-v0": MountainCarEpisodes,
+    "MountainCarContinuous-v0": MountainCarContinuousEpisodes,
+    "Pendulum-v1": PendulumEpisodes,
+    "LunarLander-v2": LunarLanderEpisodes
+}
+
+old_splits_dict = {
+    "Acrobot-v1": True,
+    "CartPole-v1": False,
+    "MountainCar-v0": False,
+    "MountainCarContinuous-v0": True,
+    "Pendulum-v1": False,
+    "LunarLander-v2": True
+}
 
 def data_dict(methods, envs, seeds, folder="results"):
     data = {}
@@ -18,11 +50,44 @@ def data_dict(methods, envs, seeds, folder="results"):
                 data[method][env][seed] = load_data(method, env, seed, folder=folder)
     return data
 
+def data_dict_icml(algos: list[str], envs: list[str], seeds: list[str]):
+    
+    data = {}
+    for algo in algos:
+        data[algo] = {}
+        for env in envs:
+            data[algo][env] = {}
+            for seed in seeds:
+                data[algo][env][seed] = load_data_icml(env, algo, seed, max_episodes_dict[env], old_splits_dict[env])
+
+    return data
+
 def load_data(method, env, seed, folder='results'):
     path = f"{folder}/{method}/{env}/{method}_{seed}.csv"
     data = pd.read_csv(path)
     # add column for accumulated reward
     data['accumulated reward'] = data['reward'].cumsum()
+
+    # add column for success rate
+    data['success rate'] = data['success'].cumsum() / (data.index + 1)
+
+    return data
+
+def load_data_icml(env: str, algo: str, seed: int, max_episodes: int, old_split=False) -> pd.DataFrame:
+
+    policy_episodes_percent = 0.8 if old_split else 0.6
+    policy_episodes, experiment_episodes = split_max_episodes(max_episodes, policy_episode_percent=policy_episodes_percent)
+    
+    if env == "MountainCarContinuous-v0":
+        path = f"results/icml/{env}/icml_{policy_episodes}_{MOUNTAINCARCONTINUOUS_K}_{algo}_{experiment_episodes}_{seed}.csv"
+    elif env == "Pendulum-v1":
+        path = f"results/icml/{env}/icml_{policy_episodes}_{PENDULUM_K}_{algo}_{experiment_episodes}_{seed}.csv"
+    else:
+        path = f"results/icml/{env}/icml_{policy_episodes}_{algo}_{experiment_episodes}_{seed}.csv"
+
+    data = pd.read_csv(path)
+    # add column for accumulated reward
+    data['accumulated reward'] = data['rewards'].cumsum()
 
     # add column for success rate
     data['success rate'] = data['success'].cumsum() / (data.index + 1)
