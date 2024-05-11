@@ -122,8 +122,49 @@ def main():
             # agent = load_model(agent_name, env['map_name'], seed)
             gym_env = Get_GymMDP(env['gym_name'], k=env['k_bins'], seed=seed)
             gym_env , agent = load_icml_q_learning(config=env, env_name=env['gym_name'], seed=seed)
+            reset_at_terminal = True
             # get env from 
             _env = env['env']
+            mdp = gym_env
+            total_accumulated_reward = 0 
+            for episode in range(episodes):
+                cumulative_episodic_reward = 0
+                # state = gym_env.get_init_state()
+                state, _ = gym_env.reset()
+                reward = 0
+                step = 0
+                done = False
+                while not done:
+                    action = agent.act(state, reward)
+                    reward, next_state = mdp.execute_agent_action(action)
+                    # if state.is_terminal():
+                    #     done = True
+                    # Execute in MDP.
+                    # Track value.
+                    # value_per_episode[episode - 1] += reward * gamma ** step
+                    total_reward += reward
+                    # Record the experience.
+                    if next_state.is_terminal():
+                        done = True
+                        # if reset_at_terminal:
+                        #     # Reset the MDP.
+                        #     next_state = mdp.get_init_state()
+                        #     mdp.reset()
+                    # Update pointer.
+                    step += 1
+                    state = next_state
+
+                log_data["episode"].append(episode)
+                log_data["reward"].append(total_reward)
+                log_data["epochs"].append(epochs)
+                log_data["success"].append(success)
+                
+                # A final update.
+                # action = agent.act(state, reward)
+                total_accumulated_reward += cumulative_episodic_reward
+            mdp.reset() # Reset the MDP, tell the agent the episode is over.
+
+
             for j in range(episodes):
                 total_reward = 0
                 epochs = 0
