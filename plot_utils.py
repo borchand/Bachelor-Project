@@ -207,11 +207,11 @@ def create_plot_grid(data, methods, envs, seeds, ax, save_name=None):
         plt.savefig(f"images/{ax}.pdf", bbox_inches='tight', format='pdf')
     plt.show()
 
-def create_plot_grid_icml(data, algos: list[str], envs: list[str], seeds: list[int], ax: str, save_name=None):
+def create_plot_grid_icml(data, algos: list[str], envs: list[str], seeds: list[int], ax: str, save_name="ppo"):
     fig, axs = plt.subplots(2, 3, figsize=(10, 5))
 
     # add margin bewteen subplots
-    fig.subplots_adjust(hspace = 0.5, wspace=.25)
+    fig.subplots_adjust(hspace = 0.5, wspace=.3)
 
     # add title to the whole plot
     # fig.suptitle("Comparing abstraction methods on " + ax)
