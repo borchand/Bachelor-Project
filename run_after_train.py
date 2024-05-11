@@ -25,7 +25,7 @@ from stable_baselines3.common.utils import get_device
 ## icml stuff 
 from icml_2019_state_abstraction.experiments.simple_rl.abstraction import AbstractionWrapper
 from icml_2019_state_abstraction.experiments.simple_rl.agents import QLearningAgent as QLearningAgentIcml
-from icml_2019_state_abstraction.experiments.run_learning_experiment import get_policy, load_agent_pytorch, Get_GymMDP
+from icml_2019_state_abstraction.experiments.run_learning_experiment import get_policy, load_agent_pytorch, Get_GymMDP, run_one_episode_q_function
 
 sys.path.append('Code/TileCoding/')
 sys.path.append('Code/envs/')
@@ -84,11 +84,10 @@ def load_icml_q_learning(config: dict, gym_env, env_name, seed) -> tuple:
 
     name_ext = "_phi_" + str(k_bins) + "_" + str(algo) + "_" + str(seed) if k_bins > 1 else "_phi_" + str(algo) + "_" + str(seed) 
     load_agent_path = "models/icml/" + env_name + "/" + str(experiment_episodes) + "/" "Q-learning" + name_ext
-    agent_params = {"alpha":0.0,"epsilon":0.1,"actions":actions,"load": True ,"load_path": load_agent_path}
     
+    abstraction_network, _ = load_agent_pytorch(policy, verbose=False)
 
-    abstraction_network, _ = load_agent_pytorch(env_name, algo, policy_train_episodes, seed, False, policy)
-
+    agent_params = {"alpha":0.0,"epsilon":0.1,"actions":actions,"load": True ,"load_path": load_agent_path}
     # include k_bins if the action space is discretized
     sa_agent = AbstractionWrapper(QLearningAgentIcml,
                                 agent_params=agent_params,
@@ -117,72 +116,20 @@ def main():
                 "success": []
             }
 
-            # Load model from ICML
-            # abstract = load_abstraction(agent_name, env['map_name'], seed)
-            # agent = load_model(agent_name, env['map_name'], seed)
             gym_env = Get_GymMDP(env['gym_name'], k=env['k_bins'], seed=seed)
-            gym_env , agent = load_icml_q_learning(config=env, env_name=env['gym_name'], seed=seed)
-            reset_at_terminal = True
+            sa_agent = load_icml_q_learning(config=env, gym_env=gym_env, env_name=env["gym_name"], seed=seed)
             # get env from 
-            _env = env['env']
-            mdp = gym_env
-            total_accumulated_reward = 0 
             for episode in range(episodes):
-                cumulative_episodic_reward = 0
-                # state = gym_env.get_init_state()
-                state, _ = gym_env.reset()
-                reward = 0
-                step = 0
-                done = False
-                while not done:
-                    action = agent.act(state, reward)
-                    reward, next_state = mdp.execute_agent_action(action)
-                    # if state.is_terminal():
-                    #     done = True
-                    # Execute in MDP.
-                    # Track value.
-                    # value_per_episode[episode - 1] += reward * gamma ** step
-                    total_reward += reward
-                    # Record the experience.
-                    if next_state.is_terminal():
-                        done = True
-                        # if reset_at_terminal:
-                        #     # Reset the MDP.
-                        #     next_state = mdp.get_init_state()
-                        #     mdp.reset()
-                    # Update pointer.
-                    step += 1
-                    state = next_state
-
+                
+                total_reward, step, success = run_one_episode_q_function(gym_env=gym_env, sa_agent=sa_agent)
+                
                 log_data["episode"].append(episode)
                 log_data["reward"].append(total_reward)
-                log_data["epochs"].append(epochs)
+                log_data["epochs"].append(step)
                 log_data["success"].append(success)
-                
-                # A final update.
-                # action = agent.act(state, reward)
-                total_accumulated_reward += cumulative_episodic_reward
-            mdp.reset() # Reset the MDP, tell the agent the episode is over.
 
-
-            for j in range(episodes):
-                total_reward = 0
-                epochs = 0
-                state = _env.reset()
-                done = False
-                while not done:
-                    state_abs = abstract.state(state)
-                    action = agent.policy(state_abs)
-                    new_state, reward, done, success = _env.step(action) 
-                    total_reward += reward
-                    epochs += 1
-                    state = new_state
-
-                log_data["episode"].append(j)
-                log_data["reward"].append(total_reward)
-                log_data["epochs"].append(epochs)
-                log_data["success"].append(success)
-            save_log_2(log_data, "CAT-RL", seed, env['map_name'])
+            save_log_2(log_data, "ppo", seed, env['gym_name'])
+        print(f"Completed evironment {env['gym_name']} {seed}")
 
     
     config = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLLunarLander, CATRLPendulum]

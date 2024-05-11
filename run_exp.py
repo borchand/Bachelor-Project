@@ -149,6 +149,9 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
             print("Running: ", ppo_config['gym_name'], " for ", episodes, "total episodes")
             ppo_config['episode_max'] = episodes
             ppo_config['debug'] = False
+            ppo_config['train'] = False
+            ppo_config['load_model'] = True
+            ppo_config['render_experiment'] = True
             for i in tqdm(range(run_exp_num)):
                 run_icml(ppo_config, seed=seeds_icml[i], verbose=False)
         
