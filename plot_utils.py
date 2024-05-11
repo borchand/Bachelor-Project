@@ -126,6 +126,8 @@ def plot(data, methods, env, seeds, ax, p=plt, xPos=0):
     
     for method in methods:
         plot_data = create_plot_data(data, method, env, seeds, ax)
+        if method == "binQ":
+            method = "Discretization"
         p.plot(plot_data["episode"], plot_data["mean"], label=method)
         p.fill_between(plot_data["episode"], plot_data["mean"] - plot_data["std"], plot_data["mean"] + plot_data["std"], alpha=0.2)
         # add legend
