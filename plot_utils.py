@@ -158,11 +158,9 @@ def plot_icml(data, algos: list[str], env: str, seeds:int, ax: str, p=plt, xPos:
     
     for algo in algos:
         plot_data = create_plot_data_icml(data, algo, env, seeds, ax)
-        p.plot(plot_data["episode"], plot_data["mean"], label=algo, color=colors[0])
+        p.plot(plot_data["episode"], plot_data["mean"], label="Demonstrator", color=colors[0])
         p.fill_between(plot_data["episode"], plot_data["mean"] - plot_data["std"], plot_data["mean"] + plot_data["std"], alpha=0.2, color=colors[0])
         # add legend
-        p.legend()
-
     # p.ticklabel_format(axis='both', style='scientific', scilimits=(-10,10))
 
 
@@ -211,7 +209,7 @@ def create_plot_grid_icml(data, algos: list[str], envs: list[str], seeds: list[i
     fig, axs = plt.subplots(2, 3, figsize=(10, 5))
 
     # add margin bewteen subplots
-    fig.subplots_adjust(hspace = 0.5, wspace=.3)
+    fig.subplots_adjust(hspace = 0.5, wspace=.4)
 
     # add title to the whole plot
     # fig.suptitle("Comparing abstraction methods on " + ax)
