@@ -1,2 +1,2 @@
 ,agent,episodes,success_rate,policy_train_time,abstraction_train_time,experiment_train_time,total_train_time,seed,total_steps
-0,icml_3600_ppo,2400,0.0,3151.208657026291,297.9861512184143,492.301,3941.495808244705,379,223124
+0,icml_3600_ppo,2400,0.0,3151.208657026291,297.9861512184143,51.89,3501.084808244705,379,223124
