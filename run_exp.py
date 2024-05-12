@@ -102,30 +102,27 @@ def get_one_env_icml_episodes(env_name: str):
 def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str = "all"):
     
     CartPoleEpisodes = 6000
-    CartPoleEpisodesIcml = 1000
     
     AcrobotEpisodes = 2000
     
-    
     MountainCarEpisodes = 5000
-    MountainCarEpisodesIcml = 3000
 
     MountainCarContinuousEpisodes = 1000
     
     LunarLanderEpisodes = 6000
-    LunarLanderEpisodesIcml = 6000
     
     PendulumEpisodes = 6000
-    PendulumEpisodesIcml = 3000 
     
     episodes_per_env_imcl = []
     episodes_per_env = []
     # For icml to run one env at a time
     if run_env == "all" or run_env == None:
-        episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodesIcml, MountainCarEpisodesIcml, MountainCarContinuousEpisodes, PendulumEpisodesIcml, LunarLanderEpisodesIcml] 
+        # episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes] 
+        episodes_per_env_imcl = [CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes] 
         # episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes]
         episodes_per_env = [PendulumEpisodes]
-        ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
+        # ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
+        ppo_configs = [IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
     else: 
         # For icml 
         episodes_per_env_imcl = get_one_env_icml_episodes(run_env)
