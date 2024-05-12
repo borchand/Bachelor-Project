@@ -45,8 +45,8 @@ MountainCarContinuous = dict(
     step_max = 200,
     episode_max = 500,
     map_name = "MountainCarContinuous-v0",
-    env = MountainCarContinuousEnv(k_bins=50),
-    renderEnv = MountainCarContinuousEnv(render=True, k_bins=50),
+    env = MountainCarContinuousEnv(k_bins=25),
+    renderEnv = MountainCarContinuousEnv(render=True, k_bins=25),
     bootstrap = 'from_ancestor',
 )
 
