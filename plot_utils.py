@@ -227,3 +227,27 @@ def create_plot_grid_icml(data, algos: list[str], envs: list[str], seeds: list[i
         plt.savefig(f"images/{ax}.pdf", bbox_inches='tight', format='pdf')
     plt.show()
 
+def eval_grid_plot(data, data_icml, methods, methods_icml, envs, seeds, seeds_icml, ax, save_name=None):
+    fig, axs = plt.subplots(2, 3, figsize=(10, 5))
+
+    # add margin bewteen subplots
+    fig.subplots_adjust(hspace = 0.5, wspace=.25)
+
+    # add title to the whole plot
+    # fig.suptitle("Comparing abstraction methods on " + ax)
+
+    for i, env in enumerate(envs):
+        plot(data, methods, env, seeds, ax, axs[i // 3][i % 3], xPos=i%3)
+    
+    for i, env in enumerate(envs):
+        plot_icml(data_icml, methods_icml, env, seeds_icml, ax, axs[i // 3][i % 3], xPos=i%3)
+
+    handles, labels = axs[i // 3][i % 3].get_legend_handles_labels()
+    axs[1][1].legend(handles = handles , labels=labels,loc='upper center', 
+             bbox_to_anchor=(0.5, -0.2),fancybox=False, shadow=False, ncol=3)
+    #save the plot as svg
+    if save_name is not None:
+        plt.savefig(f"images/{save_name}-{ax}.pdf", bbox_inches='tight', format='pdf')
+    else:
+        plt.savefig(f"images/{ax}.pdf", bbox_inches='tight', format='pdf')
+    plt.show()
