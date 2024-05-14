@@ -152,7 +152,7 @@ def plot(data, methods, env, seeds, ax, p=plt, xPos=0):
         p.set_title(f"{env}")
         # if success rate, set y limit to [0,1]
         if ax == "success rate":
-            p.set_ylim(0, 1)
+            p.set_ylim(-0.1, 1)
 
 def plot_icml(data, algos: list[str], env: str, seeds:int, ax: str, p=plt, xPos:int =0, colors: list[str]=["red"]):
     
@@ -181,7 +181,7 @@ def plot_icml(data, algos: list[str], env: str, seeds:int, ax: str, p=plt, xPos:
         p.set_title(f"{env}")
         # if success rate, set y limit to [0,1]
         if ax == "success rate":
-            p.set_ylim(0, 1)
+            p.set_ylim(-0.1, 1)
 
 def create_plot_grid(data, methods, envs, seeds, ax, save_name=None):
     fig, axs = plt.subplots(2, 3, figsize=(10, 5))
