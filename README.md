@@ -42,7 +42,6 @@ python run_icml.py -a ppo -e Acroot-v1 -pep 1000 --seed 42 -tr f
 This has training false and will load a policy that have trained for 1000 episodes with the seed 42
 
 ## CAT_RL
-about...
 
 ### Running the code
 To run the code, you can use the following command:
@@ -78,7 +77,6 @@ python CAT-RL.py -t f -e CartPole -s 123
 ```
 
 ## Tile Coding
-about...
 
 ### Running the code
 To run the code, you can use the following command:
@@ -115,7 +113,6 @@ python tileCoding.py -t f -e CartPole -s 123
 ``` 
 
 ## Bins 
-about...
 
 ### Running the code
 To run the code, you can use the following command:
@@ -153,6 +150,7 @@ python binQlearning.py -t f -e CartPole -s 123
 ```
 
 ## Running experiments
+### Fixed episodes
 To run the experiments, you can use the following command:
 ```
 python run_exp.py
@@ -163,9 +161,25 @@ There are also some optional arguments you can use:
 - `--num` or `-n`: specify the number of times to run each algorithm for each environment
     - default: `10`
 
-# Trained models
+### Trained models
 
 The trained models for the different environments can be found in the `models` folder. The models are saved as `.pkl` files and can be loaded using the `pickle` library in Python.
+
+To run the expriment with trained models, you can use the following command:
+```
+python run_after_train.py
+```
+
+Data for this expriment can be found in the `results-after-train` folder.
+
+### Test k bins
+To test the k bins, you can use the following command:
+```
+python test_k_bins.py
+```
+
+Data for this expriment can be found in `k_bins_result-<bin>`.
+
 
 <!-- # Docker stuff (might not need)
 Make sure you have docker installed on your machine. If not, you can download it with brew using the following command:
