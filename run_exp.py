@@ -117,12 +117,9 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
     episodes_per_env = []
     # For icml to run one env at a time
     if run_env == "all" or run_env == None:
-        # episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes] 
-        episodes_per_env_imcl = [CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes] 
-        # episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes]
-        episodes_per_env = [MountainCarContinuousEpisodes]
-        # ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
-        ppo_configs = [IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
+        episodes_per_env_imcl = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes] 
+        episodes_per_env = [AcrobotEpisodes, CartPoleEpisodes, MountainCarEpisodes, MountainCarContinuousEpisodes, PendulumEpisodes, LunarLanderEpisodes]
+        ppo_configs = [IcmlAcrobotPPO, IcmlCartPolePPO, IcmlMountainCarPPO, IcmlMountainCarContinuousPPO, IcmlPendulumPPO, IcmlLunarLanderPPO]
     else: 
         # For icml 
         episodes_per_env_imcl = get_one_env_icml_episodes(run_env)
@@ -162,8 +159,7 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
 
     if run_rest:
         # CATRL
-        # configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum, CATRLLunarLander]
-        configs = [CATRLMountainCarContinuous]
+        configs = [CATRLAcrobot, CATRLCartPole, CATRLMountainCar, CATRLMountainCarContinuous, CATRLPendulum, CATRLLunarLander]
 
         print('\n' + '{:_^40}'.format("Running CAT-RL") + '\n')
 
@@ -177,34 +173,34 @@ def main(run_exp_num = 10, run_icml_code = False, run_rest = True, run_env: str 
                 run_CATRL(config, seed=seeds[i], verbose=False)
 
         # Bin Q Learning
-        # configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum, BinLunarLander]
+        configs = [BinAcrobot, BinCartPole, BinMountainCar, BinMountainCarContinuous, BinPendulum, BinLunarLander]
 
-        # print('\n' + '{:_^40}'.format("Running bins") + '\n')
+        print('\n' + '{:_^40}'.format("Running bins") + '\n')
 
-        # for config, episodes in zip(configs, episodes_per_env):
-        #     print("Running ", config['map_name'])
+        for config, episodes in zip(configs, episodes_per_env):
+            print("Running ", config['map_name'])
 
-        #     env = config['env']
+            env = config['env']
 
-        #     for i in tqdm(range(run_exp_num)):
-        #         agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], seed=seeds[i], verbose=False)
+            for i in tqdm(range(run_exp_num)):
+                agent = BinQLearningAgent(env._env, config["bins"], config["alpha"], config["gamma"], config["epsilon"], config["decay"], config["eps_min"], seed=seeds[i], verbose=False)
 
-        #         run_binQ(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
+                run_binQ(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
 
         
         # Tile Coding
-        # configs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum, TileLunarLander]
+        configs = [TileAcrobot, TileCartPole, TileMountainCar, TileMountainCarContinuous, TilePendulum, TileLunarLander]
 
-        # print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
-        # for config, episodes in zip(configs, episodes_per_env):
-        #     print("Running ", config['name'])
+        print('\n' + '{:_^40}'.format("Running Tile Coding") + '\n')
+        for config, episodes in zip(configs, episodes_per_env):
+            print("Running ", config['name'])
 
-        #     env = config['env']
-        #     tiling_specs = config['tiling_specs']
+            env = config['env']
+            tiling_specs = config['tiling_specs']
 
-        #     for i in tqdm(range(run_exp_num)):
-        #         agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
-        #         run_tileCoding(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
+            for i in tqdm(range(run_exp_num)):
+                agent = TileCodingAgent((env._action_space.n, env._env.observation_space.low, env._env.observation_space.high), tiling_specs, verbose=False)
+                run_tileCoding(env, agent, episodes, config['map_name'], seed=seeds[i], verbose=False)
     
 if __name__ == "__main__":
 

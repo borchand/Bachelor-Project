@@ -2,7 +2,7 @@
 
 
 ## Getting Started
-To run the code in this repository, you need to have Python...
+The code in this repository uses python 3.10 or 3.11
 
 Some tasks from OpenAI Gym uses `Box2D`. For this to work you need to isnstall swig. You can do this using brew with the following command:
 
@@ -161,26 +161,11 @@ By default, this will run each algorithm 20 times for all the environments. The 
 
 There are also some optional arguments you can use:
 - `--num` or `-n`: specify the number of times to run each algorithm for each environment
-    - default: `20`
+    - default: `10`
 
 # Trained models
 
 The trained models for the different environments can be found in the `models` folder. The models are saved as `.pkl` files and can be loaded using the `pickle` library in Python.
-
-## CAT_RL
-
-### CartPole-v1
-
-### MountainCar-v0
-
-### LunarLander-v2
-
-### Acrobot-v1
-
-### MountainCarContinuous-v0
-
-### Pendulum-v1
-
 
 <!-- # Docker stuff (might not need)
 Make sure you have docker installed on your machine. If not, you can download it with brew using the following command:
