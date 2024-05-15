@@ -45,8 +45,8 @@ MountainCarContinuous = dict(
     step_max = 200,
     episode_max = 500,
     map_name = "MountainCarContinuous-v0",
-    env = MountainCarContinuousEnv(),
-    renderEnv = MountainCarContinuousEnv(render=True),
+    env = MountainCarContinuousEnv(k_bins=25),
+    renderEnv = MountainCarContinuousEnv(render=True, k_bins=25),
     bootstrap = 'from_ancestor',
 )
 
@@ -87,7 +87,7 @@ Pendulum = dict(
     step_max = 200,
     episode_max = 6000,
     map_name = "Pendulum-v1",
-    env = PendulumEnv(),
-    renderEnv = PendulumEnv(render=True),
+    env = PendulumEnv(k_bins=8),
+    renderEnv = PendulumEnv(render=True, k_bins=8),
     bootstrap = 'from_init',
 )

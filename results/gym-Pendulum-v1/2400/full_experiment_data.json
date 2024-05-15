@@ -1,0 +1,21 @@
+{
+    "MDP": {
+        "name": "<class 'simple_rl.tasks.gym.GymMDPClass.GymMDP'>",
+        "params": {
+            "env_name": "Pendulum-v1"
+        }
+    },
+    "AGENTS": {
+        "<class 'simple_rl.abstraction.AbstractionWrapperClass.AbstractionWrapper'>": {
+            "params": {},
+            "index": 0
+        }
+    },
+    "MISC": {
+        "instances": 1,
+        "episodes": 600,
+        "steps": 1000,
+        "track_disc_reward": false
+    },
+    "FUNC": "run_agents_on_mdp"
+}

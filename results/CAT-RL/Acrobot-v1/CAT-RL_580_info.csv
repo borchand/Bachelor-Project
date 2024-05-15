@@ -1,0 +1,2 @@
+,seed,time,agent,env,episodes,epochs,success_rate,abs_size
+0,580,282.01292729377747,CAT-RL,Acrobot-v1,2000,906768,0.2908545727136432,1198

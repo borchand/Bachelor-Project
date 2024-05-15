@@ -1,0 +1,2 @@
+,seed,time,agent,env,episodes,epochs,success_rate
+0,639,47.25314545631409,binQ,MountainCarContinuous-v0,1000,805136,0.415

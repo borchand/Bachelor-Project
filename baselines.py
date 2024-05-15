@@ -1,10 +1,10 @@
 import os
 import gymnasium as gym
-from huggingface_sb3 import load_from_hub
 from icml_2019_state_abstraction.mac.ActionWrapper import discretizing_wrapper
 from stable_baselines3 import PPO, A2C, DQN, SAC, TD3, DDPG
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.callbacks import StopTrainingOnMaxEpisodes, BaseCallback, CallbackList, ProgressBarCallback
+from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.logger import configure
 import pandas as pd
@@ -38,7 +38,7 @@ def _get_model_class(algo_name):
         return DDPG
     else:
         raise ValueError('Invalid algorithm name')
-def get_save_name(env_name, algo_name, episodes, k=None):
+def get_save_name(env_name: str, algo_name: str, episodes: int, seed: int , k=None, verbose: bool = False):
     """
     Args:
         :param algo_name (str): Name of the algorithm
@@ -55,11 +55,18 @@ def get_save_name(env_name, algo_name, episodes, k=None):
     if k > 1 and env_name in continuous_action_envs:
         save_name += str(k) + "_"
     
-    save_name += algo_name + "_" + env_name
-    print("this is the save name", save_name)
+    save_name += algo_name + "_" + env_name + "_" + str(seed)
+    if verbose:
+        print("this is the save name", save_name)
     return save_name
 
-def get_gym_env(env_name, render=False, k=20):
+def get_vec_env(env_name, n_envs=8, k=1):
+
+    wrapper_kwargs = {'k': k}
+    vec_env = make_vec_env(env_id=env_name, n_envs=n_envs, wrapper_class=RewardShapingWrapper, wrapper_kwargs=wrapper_kwargs)
+    return vec_env
+
+def get_gym_env(env_name, render=False, k=1):
     """
     Args:
         :param env_name (str): Name of the environment
@@ -69,7 +76,6 @@ def get_gym_env(env_name, render=False, k=20):
     Returns:
         gym_env (gym.Env): Gym environment
     """
-    print("this is the env name", env_name)
     gym_env = gym.make(env_name, render_mode='human') if render else gym.make(env_name)
 
     if isinstance(gym_env.action_space, gym.spaces.Box): 
@@ -81,10 +87,11 @@ class RewardShapingWrapper(gym.Wrapper):
     """
     Callback for logging the reward at each timestep
     """
-    def __init__(self, env):
-        
+    def __init__(self, env, k):
+        if isinstance(env.action_space, gym.spaces.Box): 
+            env = discretizing_wrapper(env, k)
+
         super().__init__(env)
-        print("Wrapped in reward shaping wrapper")
         self.reward_shaping = self.get_reward_shaping()
         self.reward_shaping_end = self.get_reward_shaping_end()
     
@@ -139,9 +146,6 @@ class RewardShapingWrapper(gym.Wrapper):
         if self.env.unwrapped.spec.id == "MountainCarContinuous-v0":
             return self._MountainCar_reward_shaping_end
 
-        if self.env.unwrapped.spec.id == "CartPole-v1":
-            return self._CartPole_reward_shaping_end
-        
         if self.env.unwrapped.spec.id == "Pendulum-v1":
             return self._Pendulum_reward_shaping_end
         
@@ -197,9 +201,10 @@ def from_config(config: dict, seed=None, verbose=False, time_limit_sec=None):
         save=config['save'],
         train=config['train'],
         debug=config['debug'],
+        verbose=verbose,
         seed=seed)
 
-def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render=False, save=True, train=True, debug=False):
+def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render=False, save=True, train=True, verbose=False, debug=False):
     """
     Args:
         :param env_name (str): Name of the environment
@@ -213,10 +218,18 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
     if debug == True:
         episodes = 3
 
-
+    vec_env = get_vec_env(env_name, n_envs=8, k=k)
+    
     env = get_gym_env(env_name, render=False, k=k)
-    save_name = get_save_name(env_name, algo_name, episodes, k=k)
-    env = RewardShapingWrapper(env)
+    save_name = get_save_name(
+        env_name=env_name,
+        algo_name=algo_name,
+        episodes=episodes,
+        seed=seed,
+        verbose=verbose,
+        k=k)
+    
+    # env = RewardShapingWrapper(env)
     ## set random seed
     random.seed(seed)
     set_random_seed(seed)
@@ -225,7 +238,7 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
     model_class = _get_model_class(algo_name)
 
     # create the model
-    model = model_class("MlpPolicy", env=env, verbose=1)
+    model = model_class("MlpPolicy", env=vec_env, verbose=1)
     logger = get_logger()
     model.set_logger(logger)
     
@@ -235,7 +248,7 @@ def main(env_name: str, algo_name: str, episodes: int, k: int, seed: int, render
         callback_max_episodes = StopTrainingOnMaxEpisodes(max_episodes=episodes, verbose=1)
         callback_list = CallbackList([callback_max_episodes, callback_progress_bar])
         # get max number of steps in a episode
-        max_timesteps = env.env._max_episode_steps * episodes
+        max_timesteps = env._max_episode_steps * episodes
         
         # model learn the env
         if render:

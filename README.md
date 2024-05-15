@@ -2,7 +2,7 @@
 
 
 ## Getting Started
-To run the code in this repository, you need to have Python...
+The code in this repository uses python 3.10 or 3.11
 
 Some tasks from OpenAI Gym uses `Box2D`. For this to work you need to isnstall swig. You can do this using brew with the following command:
 
@@ -29,6 +29,17 @@ This repository contains the following environments:
 - `MountainCarContinuous-v0`
 - `Pendulum-v1`
 
+## Icml State abstraction 
+To run the code, this will train a ppo policy with 1000 episodes and then run the experiments
+```
+python run_icml.py -a ppo -e Acrobot-v1 -pep 1000
+```
+
+To run a pre trained policy, you have to specify the seed 
+```
+python run_icml.py -a ppo -e Acroot-v1 -pep 1000 --seed 42 -tr f 
+```
+This has training false and will load a policy that have trained for 1000 episodes with the seed 42
 
 ## CAT_RL
 about...
@@ -150,26 +161,11 @@ By default, this will run each algorithm 20 times for all the environments. The 
 
 There are also some optional arguments you can use:
 - `--num` or `-n`: specify the number of times to run each algorithm for each environment
-    - default: `20`
+    - default: `10`
 
 # Trained models
 
 The trained models for the different environments can be found in the `models` folder. The models are saved as `.pkl` files and can be loaded using the `pickle` library in Python.
-
-## CAT_RL
-
-### CartPole-v1
-
-### MountainCar-v0
-
-### LunarLander-v2
-
-### Acrobot-v1
-
-### MountainCarContinuous-v0
-
-### Pendulum-v1
-
 
 <!-- # Docker stuff (might not need)
 Make sure you have docker installed on your machine. If not, you can download it with brew using the following command:

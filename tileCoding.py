@@ -13,7 +13,7 @@ from Code.TileCoding.config import *
 from Code.TileCoding.agent import *
 from Code.utils import save_log, save_model, load_model
 
-def run_agent(env, agent, nEpisodes, env_name, seed=None, verbose=False):
+def run_agent(env, agent, nEpisodes, env_name, seed=None, verbose=False, model_save=True, log_save=True, log_folder="results/"):
     
     log_data = {
         "episode": [],
@@ -78,9 +78,10 @@ def run_agent(env, agent, nEpisodes, env_name, seed=None, verbose=False):
     log_info["epochs"].append(sum(log_data["epochs"]))
     log_info["success_rate"].append(sum(log_data["success"])/nEpisodes)
 
-
-    save_model(agent, log_info)
-    save_log(log_data, log_info)
+    if model_save:
+        save_model(agent, log_info)
+    if log_save:
+        save_log(log_data, log_info, folder=log_folder)
 
     return agent
 

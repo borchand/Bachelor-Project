@@ -11,13 +11,24 @@ import baselines
 import argparse
 import Code.icml.utils as utils
 
-def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None):
+def split_max_episodes(max_episodes: int, policy_episode_percent: int = 0.6):
+    """
+    Split the maximum number of episodes into training and experiment episodes
+    The split is 60/40 by default, 60% policy 40% experiment
+    """
+    policy_episodes = int(max_episodes * policy_episode_percent)
+    experiment_episodes = max_episodes - policy_episodes
+    
+    return policy_episodes, experiment_episodes
+
+def icml_from_config(config: dict, seed=42, verbose=False, time_limit_sec=None):
 
     algo = config["algo"]
     gym_name = config["gym_name"]
     config["env_name"] = gym_name
-    policy_episodes = config["policy_episodes"]
-    experiment_episodes = config["experiment_episodes"]
+    policy_episodes, experiment_episodes = split_max_episodes(config["episode_max"])
+    config["policy_episodes"] = policy_episodes
+    config["experiment_episodes"] = experiment_episodes
     k_bins = config["k_bins"]
     train = config["train"]
     run_experiment = config["run_experiment"]
@@ -25,7 +36,7 @@ def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None
     load_model = config["load_model"]
     render_policy = config["render_policy"]
     render_experiment = config["render_experiment"]
-    debug = config["debug"]
+    debug = config['debug']
 
     if config["algo"] == 'mac':
         
@@ -67,6 +78,7 @@ def icml_from_config(config: dict, seed=None, verbose=False, time_limit_sec=None
             run_expiriment=run_experiment,
             verbose=verbose,
             debug=debug)
+
 def main(
         gym_name: str,
         algo: str,
@@ -79,10 +91,12 @@ def main(
         run_experiment=True,
         abstraction=True,
         load_model=False,
+        load_experiment=False,
         render_policy=False,
         render_experiment=False,
         save=True,
         verbose=False,
+        debug=False,
         config=None
         ):
 
@@ -115,6 +129,8 @@ def main(
         config["train"] = train
         config["policy_episodes"] = policy_episodes
         config["k_bins"] = k_bins
+        config['debug'] = debug
+    
     if algo == 'mac':
         
         if verbose:
@@ -126,7 +142,7 @@ def main(
             verbose=verbose,
             time_limit_sec=time_limit_sec)
     
-    else:
+    elif train or render_policy:
         if verbose:
             print("Running training of algorithm: ", algo, "in environment: ", gym_name, "for ", policy_episodes, "episodes.")
         
@@ -155,6 +171,8 @@ def main(
             render=render_experiment,
             experiment_episodes=experiment_episodes,
             run_expiriment=run_experiment,
+            load_experiment=load_experiment,
+            debug=debug,
             verbose=verbose)
 
 def main_with_config(config: dict, seed=None, verbose=False):
@@ -196,8 +214,11 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--env', default='CartPole-v1', help='Environment to train on')
     parser.add_argument('-a', '--algo', default='ppo', choices=['mac', 'dqn', 'ppo', 'sac'], help='Algorithm to use when training')
     parser.add_argument('-k', '--k-bins', default=1, help='Number of bins to discretize the action space', type=int)
-    parser.add_argument('-pep', '--policy_episodes', default=100, help='Number of episodes to train the model for', type=int)
-    parser.add_argument('-eep', '--experiment_episodes', default=100, help='Number of episodes to train the model for', type=int)
+    
+    parser.add_argument('-pep', '--policy_episodes', default=None, help='Number of episodes to train the model for', type=int)
+    parser.add_argument('-eep', '--experiment_episodes', default=None, help='Number of episodes to train the model for', type=int)
+    parser.add_argument('-ep', '--episode_max', default=1000, help='Maximum number of episodes to train the model for', type=int)
+    
     parser.add_argument('-seed', '--seed', default=42, help='Seed for reproducibility', type=int)
 
     parser.add_argument('-tr', '--train', choices=['t', 'f'], default='t', help='Train the model')
@@ -206,10 +227,13 @@ if __name__ == "__main__":
     parser.add_argument('-ab', '--abstraction', choices=['t', 'f'], default='t', help='Use state abstraction')
 
     parser.add_argument('-l', '--load', choices=['t', 'f'], default='f', help='Load a pre-trained model')
+    parser.add_argument('-le', '--load-experiment', choices=['t', 'f'], default='f', help='Load the experiment')
+
     parser.add_argument('-s', '--save', choices=['t', 'f'], default='t', help='Save the model')
     parser.add_argument('-sh', '--show', choices=['t', 'f'], default='f', help='Show the model')
     parser.add_argument('-v', '--verbose', choices=['t', 'f'], default='t', help='Verbose output')
-    
+    parser.add_argument('-d', '--debug', choices=['t', 'f'], default='f', help='debug output')
+
     parser.add_argument('-r', '--render', choices=['t', 'f'], default='t', help='Render the model')
     parser.add_argument('-rp', '--render-policy', choices=['t', 'f'], default=None, help='Render the policy')
     parser.add_argument('-re', '--render-experiment', choices=['t', 'f'], default=None, help='Render the policy')
@@ -218,18 +242,26 @@ if __name__ == "__main__":
     render_policy = args.render_policy if args.render_policy is not None else args.render
     render_experiment = args.render_experiment if args.render_experiment is not None else args.render
     
+    if args.policy_episodes is None or args.experiment_episodes is None:
+        policy_episodes, experiment_episodes = split_max_episodes(args.episode_max)
+    else:
+        policy_episodes = args.policy_episodes
+        experiment_episodes = args.experiment_episodes
+    
     main(
         gym_name=args.env,
         algo=args.algo,
-        policy_episodes=args.policy_episodes,
-        experiment_episodes=args.experiment_episodes,
+        policy_episodes=policy_episodes,
+        experiment_episodes=experiment_episodes,
         abstraction=args.abstraction == 't',
         seed=args.seed,
         train=args.train == 't',
         load_model=args.load == 't',
+        load_experiment=args.load_experiment == 't',
         render_policy=render_policy == 't',
         render_experiment=render_experiment == 't',
         save=args.save == 't',
         run_experiment=args.experiment == 't',
         k_bins=args.k_bins,
+        debug=args.debug == 't',
         verbose=args.verbose == 't')

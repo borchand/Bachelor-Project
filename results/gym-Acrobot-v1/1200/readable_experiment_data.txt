@@ -1,0 +1,9 @@
+(MDP)
+	gym-Acrobot-v1
+(Agents)
+	Q-learning_phi_ppo_886,0
+(Params)
+	instances : 1
+	episodes : 800
+	steps : 1000
+	track_disc_reward : False

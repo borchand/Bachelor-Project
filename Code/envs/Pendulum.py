@@ -7,10 +7,10 @@ class PendulumEnv(ContinuousActionBaseEnv):
         This class defines the Mountain Car Continuous environment, which is a subclass of the BaseEnv class.
         It initializes the environment, and defines the step methods.
     """
-    def __init__(self, render=False):
+    def __init__(self, render=False, k_bins=4):
         super().__init__(
             EnvType.Pendulum.value,
-            4,
+            k_bins,
             render=render)
 
     def step(self, action):  
@@ -22,7 +22,6 @@ class PendulumEnv(ContinuousActionBaseEnv):
 
         x, y, velocity = new_state
         if abs(y) < 0.2 and x > 0 and abs(velocity) < 0.2:
-                success = True
                 reward += 10
 
 

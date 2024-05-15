@@ -1,0 +1,2 @@
+,seed,time,agent,env,episodes,epochs,success_rate,abs_size
+0,580,206.76881861686707,CAT-RL,Pendulum-v1,6000,1200200,0.046992167972004666,421

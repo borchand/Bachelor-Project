@@ -22,7 +22,7 @@ def show_model(agent, abstract, env):
             new_state, reward, done, success = env.step(action)
             state = new_state
 
-def main(config, seed=None, verbose=False):
+def main(config, seed=None, verbose=False, model_save=True, log_save=True, log_folder="results/"):
 
     epsilon_min = config['epsilon_min']
     alpha = config['alpha']
@@ -48,12 +48,15 @@ def main(config, seed=None, verbose=False):
         decay,
         k_cap,
         seed=seed,
-        verbose=verbose
+        verbose=verbose,
+        do_abs_every=100
     )
 
-    save_model(agent, log_info)
-    save_abstraction(abstraction, log_info)
-    save_log(log_data, log_info)
+    if model_save:
+        save_model(agent, log_info)
+        save_abstraction(abstraction, log_info)
+    if log_save:
+        save_log(log_data, log_info, folder=log_folder)
 
     return agent, abstraction
 
