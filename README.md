@@ -2,7 +2,7 @@
 
 
 ## Getting Started
-The code in this repository uses python 3.10 or 3.11
+The code in this repository uses python 3.10 or 3.11 and linux as operating system
 
 Some tasks from OpenAI Gym uses `Box2D`. For this to work you need to isnstall swig. You can do this using brew with the following command:
 
@@ -19,6 +19,18 @@ When you have swig installed, you can install the required packages using the fo
 ```
 pip install -r requirements.txt
 ```
+## Errors
+
+If you get Attribute error
+```
+AttributeError: module '_Box2D' has no attribute 'RAND_LIMIT_swigconstant'
+```
+Try install gymnasium wiht all, this should solve the problem
+
+```
+pip install gymnasium[all]
+```
+
 
 ## Environments
 This repository contains the following environments:
@@ -39,7 +51,24 @@ To run a pre trained policy, you have to specify the seed
 ```
 python run_icml.py -a ppo -e Acroot-v1 -pep 1000 --seed 42 -tr f 
 ```
-This has training false and will load a policy that have trained for 1000 episodes with the seed 42
+This has training false `-tr f` and will load a policy that have trained for 1000 episodes with the seed 42
+
+The `run_icml.py` takes the following command line parameters
+- `-a` `--algo: str` - The algorithm to train
+- `-e` `--env: str` - The gym environment to run
+- `-k --k-bins: int` (default=1) - The number of bins to discretize environments with continuous action spaces
+- `-tr --train: bool` (default=True) A bool that determines whether to train or not
+- `-ex --experiement: bool` (default=True), if true run the experiment
+- `-ab --abstraction: bool` (default=True), if true loads or creates the abstraction network
+- `-ep --episodes` the total amout of episodes to run for policy training and experiment training
+- `-pep --policy-episodes`(default=None) the number of episodes to train the expert policy 
+- `-eep --experiment-episodes`(default=None ) the number of episodes to train the experiment 
+- `-r --render: bool` (default=Fale), if true renders one episode of the algorithm in the environment
+- `-rp --render-policy: bool` (default=Fale), if true renders one episode of the expert policy in the environment
+- `-re --render-experiment: bool` (default=Fale), if true renders one episode of the algorithm in the environment
+- `-s --save: bool` (default=True), if true saves the trained model
+- `-l -load: bool` (default=False), if true load a trained abstraction network, with specified time-steps and algo
+- `-le -load-experiment: bool` (default=False), if true load a trained abstraction network, with specified time-steps and algo
 
 ## CAT_RL
 
